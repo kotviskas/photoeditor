@@ -47,6 +47,7 @@
         app:backgroundTint="#E91E63"
         app:fabSize="auto"
         app:srcCompat="@drawable/ic_menu_camera"
-        app:useCompatPadding="false" />
+        app:useCompatPadding="false"
+        android:focusable="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
