@@ -1,8 +1,14 @@
 package com.serezha2001.photoeditor;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CAMERA = 1, SELECT_FILE = 0;
     private AppBarConfiguration mAppBarConfiguration;
     public ImageView mainImage;
 
@@ -28,14 +35,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        mainImage = findViewById(R.id.mainImage);
+        mainImage.setImageResource(R.drawable.lenna);
+        FloatingActionButton choosePic = findViewById(R.id.choosePic);
+        FloatingActionButton camButton = findViewById(R.id.takePhoto);
+        choosePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent.createChooser(intent, "Select File"), SELECT_FILE);
             }
         });
+        camButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick (View view){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent,REQUEST_CAMERA);
+            }
+        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -48,11 +67,20 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        mainImage = findViewById(R.id.mainImage);
-        mainImage.setImageResource(R.drawable.lenna);
-
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                mainImage.setImageBitmap(bitmap);
+            } else if (requestCode == SELECT_FILE) {
+                mainImage.setImageURI(data.getData());
+            }
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -67,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void onClickChangeImage() {
 
-    }
+
+
 }

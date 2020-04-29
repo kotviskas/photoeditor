@@ -24,8 +24,9 @@
         android:id="@+id/mainImage"
         android:layout_width="413sp"
         android:layout_height="382sp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/nav_host_fragment"
         app:srcCompat="@drawable/ic_menu_gallery" />

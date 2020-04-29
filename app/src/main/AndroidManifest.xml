@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.serezha2001.photoeditor">
+    <uses-permission android:name="android.permission.camera2" />
 
     <application
         android:allowBackup="true"
