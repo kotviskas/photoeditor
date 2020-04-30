@@ -24,13 +24,13 @@
         android:id="@+id/mainImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="60sp"
-        android:layout_marginBottom="75sp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="85dp"
         android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/nav_host_fragment"
-        app:srcCompat="@drawable/ic_menu_gallery" />
+        app:srcCompat="@drawable/lenna" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

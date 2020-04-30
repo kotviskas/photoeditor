@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.serezha2001.photoeditor.ui.one.HomeFragment"
+        android:name="com.serezha2001.photoeditor.ui.homeFragment.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_one">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_home_second"
-        android:name="com.serezha2001.photoeditor.ui.one.HomeSecondFragment"
+        android:name="com.serezha2001.photoeditor.ui.homeFragment.HomeSecondFragment"
         android:label="@string/home_second"
         tools:layout="@layout/fragment_home_second">
         <action
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.serezha2001.photoeditor.ui.two.GalleryFragment"
+        android:name="com.serezha2001.photoeditor.ui.zoomFragment.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_two" />
 

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA = 1, SELECT_FILE = 0;
     private AppBarConfiguration mAppBarConfiguration;
-    public ImageView mainImage;
+    public static ImageView mainImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mainImage = findViewById(R.id.mainImage);
-        mainImage.setImageResource(R.drawable.lenna);
+        //mainImage.setImageResource(R.drawable.lenna);
         FloatingActionButton choosePic = findViewById(R.id.choosePic);
         FloatingActionButton camButton = findViewById(R.id.takePhoto);
         choosePic.setOnClickListener(new View.OnClickListener() {
