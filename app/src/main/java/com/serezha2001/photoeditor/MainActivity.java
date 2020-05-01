@@ -46,10 +46,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mainImage = findViewById(R.id.mainImage);
-        if (savedInstanceState != null){
-            mainImage.setImageBitmap((Bitmap)savedInstanceState.getParcelable("mainImage"));
-        }
-
         FloatingActionButton choosePic = findViewById(R.id.choosePic);
         FloatingActionButton camButton = findViewById(R.id.takePhoto);
         FloatingActionButton saveBtn = findViewById(R.id.savePic);
@@ -114,13 +110,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Bitmap img = ((BitmapDrawable)mainImage.getDrawable()).getBitmap();
-        outState.putParcelable("mainImage", img);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -145,8 +134,5 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-
-
 
 }
