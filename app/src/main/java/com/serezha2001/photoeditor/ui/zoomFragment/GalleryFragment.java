@@ -11,14 +11,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
 public class GalleryFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
 
     public static Button Apply, Undo;
     public static EditText Coef;
@@ -26,8 +24,7 @@ public class GalleryFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_two, container, false);
 
         Apply = (Button) root.findViewById(R.id.zoomApply);

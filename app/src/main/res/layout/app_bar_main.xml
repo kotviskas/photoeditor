@@ -30,6 +30,17 @@
         app:srcCompat="@drawable/ic_menu_gallery" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/savePic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="#FFFFFF"
+        app:backgroundTint="#E91E63"
+        app:rippleColor="#FFFFFF"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/takePhoto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

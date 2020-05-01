@@ -1,20 +1,27 @@
 package com.serezha2001.photoeditor;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,6 +29,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         //mainImage.setImageResource(R.drawable.lenna);
         FloatingActionButton choosePic = findViewById(R.id.choosePic);
         FloatingActionButton camButton = findViewById(R.id.takePhoto);
+        FloatingActionButton saveBtn = findViewById(R.id.savePic);
         choosePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,6 +63,37 @@ public class MainActivity extends AppCompatActivity {
             public void onClick (View view){
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent,REQUEST_CAMERA);
+            }
+        });
+        saveBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                },
+                                1);
+                    }
+
+                    File file = new File(Environment.getExternalStorageDirectory().toString(), "redactedImage.jpg");
+                   // Toast.makeText(getApplicationContext(), file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    Bitmap bitmap = ((BitmapDrawable)mainImage.getDrawable()).getBitmap();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut); // сохранять картинку в jpeg-формате с 85% сжатия.
+                    fOut.flush();
+                    fOut.close();
+                    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(),  file.getName()); // регистрация в фотоальбоме
+                    Toast.makeText(getApplicationContext(), "Done!", Toast.LENGTH_SHORT).show();
+
+                }
+                catch (Exception e)
+                {
+                   // Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
