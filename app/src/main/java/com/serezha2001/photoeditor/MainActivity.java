@@ -2,10 +2,13 @@ package com.serezha2001.photoeditor;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -30,6 +33,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton choosePic = findViewById(R.id.choosePic);
         FloatingActionButton camButton = findViewById(R.id.takePhoto);
         FloatingActionButton saveBtn = findViewById(R.id.savePic);
+
         choosePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,30 +74,27 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{
-                                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                },
-                                1);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+                        Thread.sleep(5000);
                     }
+                    saveImage(((BitmapDrawable)mainImage.getDrawable()).getBitmap(), "redactedImage");
 
-                    File file = new File(Environment.getExternalStorageDirectory().toString(), "redactedImage.jpg");
-                   // Toast.makeText(getApplicationContext(), file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    //**prev version of file save**
+                    /*  File file = new File(Environment.getExternalStorageDirectory().toString(), "redactedImage.jpg");
+                    // Toast.makeText(getApplicationContext(), file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                     FileOutputStream fOut = new FileOutputStream(file);
                     Bitmap bitmap = ((BitmapDrawable)mainImage.getDrawable()).getBitmap();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut); // сохранять картинку в jpeg-формате с 85% сжатия.
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
                     fOut.flush();
                     fOut.close();
-                    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(),  file.getName()); // регистрация в фотоальбоме
-                    Toast.makeText(getApplicationContext(), "Done!", Toast.LENGTH_SHORT).show();
+                    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(),  file.getName());*/
 
+                    Toast.makeText(getApplicationContext(), "Done!", Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception e)
                 {
-                   // Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -133,6 +136,26 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void saveImage(Bitmap bitmap, @NonNull String name) throws IOException {
+        OutputStream fOs;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentResolver resolver = getApplicationContext().getContentResolver();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/");
+            fOs = resolver.openOutputStream(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues));
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOs);
+        } else {
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + File.separator, name + ".png");
+            fOs = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOs);
+            MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(),  file.getName());
+        }
+        fOs.flush();
+        fOs.close();
     }
 
 }

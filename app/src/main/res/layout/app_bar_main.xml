@@ -38,7 +38,7 @@
         android:tint="#FFFFFF"
         app:backgroundTint="#E91E63"
         app:rippleColor="#FFFFFF"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+        app:srcCompat="@drawable/saveicon" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/takePhoto"
