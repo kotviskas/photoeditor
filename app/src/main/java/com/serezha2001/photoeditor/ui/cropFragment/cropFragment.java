@@ -29,7 +29,9 @@ public class cropFragment extends Fragment {
 
         Apply = (Button) root.findViewById(R.id.zoomApply);
         Undo = (Button) root.findViewById(R.id.zoomUndo);
+        Undo.setEnabled(false);
         Coef = (EditText) root.findViewById(R.id.zoomCoef);
+
 
         Apply.setOnClickListener(new View.OnClickListener(){
             public void onClick (View view){
@@ -46,6 +48,7 @@ public class cropFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
+                Undo.setEnabled(false);
             }
         });
         return root;
@@ -66,6 +69,7 @@ public class cropFragment extends Fragment {
                 }
             }
             MainActivity.mainImage.setImageBitmap(croppedBitmap);
+            Undo.setEnabled(true);
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Error! " + e, Toast.LENGTH_SHORT).show();
         }
