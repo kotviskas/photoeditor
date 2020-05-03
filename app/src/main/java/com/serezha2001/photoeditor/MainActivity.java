@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton camButton = findViewById(R.id.takePhoto);
         FloatingActionButton saveBtn = findViewById(R.id.savePic);
 
-        choosePic.setOnClickListener(new View.OnClickListener() {
+        choosePic.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -78,17 +78,6 @@ public class MainActivity extends AppCompatActivity {
                         Thread.sleep(5000);
                     }
                     saveImage(((BitmapDrawable)mainImage.getDrawable()).getBitmap(), "redactedImage");
-
-                    //**prev version of file save**
-                    /*  File file = new File(Environment.getExternalStorageDirectory().toString(), "redactedImage.jpg");
-                    // Toast.makeText(getApplicationContext(), file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                    FileOutputStream fOut = new FileOutputStream(file);
-                    Bitmap bitmap = ((BitmapDrawable)mainImage.getDrawable()).getBitmap();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
-                    fOut.flush();
-                    fOut.close();
-                    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(),  file.getName());*/
-
                     Toast.makeText(getApplicationContext(), "Done!", Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception e)
