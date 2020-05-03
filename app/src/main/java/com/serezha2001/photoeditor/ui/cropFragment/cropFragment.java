@@ -53,12 +53,16 @@ public class cropFragment extends Fragment {
 
     private void imageCrop(int scale) {
         try {
-            Bitmap croppedBitmap = Bitmap.createBitmap((Integer)prevBitmap.getWidth()/scale, (Integer)prevBitmap.getHeight()/scale, Bitmap.Config.ARGB_8888);
-            for (int x = 0; x < (Integer)prevBitmap.getWidth()/scale; x++){
-                for (int y = 0; y < (Integer)prevBitmap.getHeight()/scale; y++){
-                    int prevBitmapPixel = prevBitmap.getPixel((Integer)prevBitmap.getWidth()/2 - (Integer)prevBitmap.getWidth()/scale/2 + x,(Integer)prevBitmap.getHeight()/2 - (Integer)prevBitmap.getHeight()/scale/2 + y);
+            Bitmap croppedBitmap = Bitmap.createBitmap((Integer)prevBitmap.getWidth(), (Integer)prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            for (int x = 0, prevx = 0; x < (Integer)croppedBitmap.getWidth(); x += scale, prevx++){
+                for (int y = 0, prevy = 0; y < (Integer)croppedBitmap.getHeight(); y += scale, prevy++){
+                    int prevBitmapPixel = prevBitmap.getPixel((Integer)prevBitmap.getWidth()/2 - (Integer)prevBitmap.getWidth()/scale/2 + prevx,(Integer)prevBitmap.getHeight()/2 - (Integer)prevBitmap.getHeight()/scale/2 + prevy);
                     int newPixel= Color.argb(Color.alpha(prevBitmapPixel), Color.red(prevBitmapPixel), Color.green(prevBitmapPixel), Color.blue(prevBitmapPixel));
-                    croppedBitmap.setPixel(x, y, newPixel);
+                    for (int i = 0; i < scale && x + i< croppedBitmap.getWidth(); i++){
+                        for (int j = 0; j < scale && y + j < croppedBitmap.getHeight(); j++){
+                            croppedBitmap.setPixel(x+i, y+j, newPixel);
+                        }
+                    }
                 }
             }
             MainActivity.mainImage.setImageBitmap(croppedBitmap);
