@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton camButton = findViewById(R.id.takePhoto);
         FloatingActionButton saveBtn = findViewById(R.id.savePic);
 
+
         choosePic.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -142,10 +143,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
-
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeFile(curImagePath);
-                    mainImage.setImageBitmap(bitmap);
+                    mainImage.setImageURI(Uri.parse(curImagePath));
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
                 }

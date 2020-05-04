@@ -9,7 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.serezha2001.photoeditor.ui.homeFragment.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_one">
+        tools:layout="@layout/homeFragment">
 
         <action
             android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
@@ -33,11 +33,11 @@
         android:id="@+id/nav_gallery"
         android:name="com.serezha2001.photoeditor.ui.cropFragment.cropFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_two" />
+        tools:layout="@layout/fragment_crop" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.serezha2001.photoeditor.ui.three.SlideshowFragment"
+        android:name="com.serezha2001.photoeditor.ui.brightnessFragment.brightnessFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_three" />
+        tools:layout="@layout/fragment_brightness" />
 </navigation>
