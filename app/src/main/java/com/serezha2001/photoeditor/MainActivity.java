@@ -7,7 +7,9 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 1, SELECT_FILE = 0;
     private AppBarConfiguration mAppBarConfiguration;
     public static ImageView mainImage;
+    String curImagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +70,25 @@ public class MainActivity extends AppCompatActivity {
         camButton.setOnClickListener(new View.OnClickListener(){
             public void onClick (View view){
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,REQUEST_CAMERA);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    File imageFile = null;
+                    try {
+                        imageFile = getImageFile();
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
+                    }
+                    if (imageFile != null) {
+                        curImagePath = imageFile.getAbsolutePath();
+                        Uri imagePath = FileProvider.getUriForFile(MainActivity.this, "com.serezha2001.photoeditor.fileprovider", imageFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imagePath);
+                        startActivityForResult(intent, REQUEST_CAMERA);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Error! ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "There is no available camera on your smartphone :(", Toast.LENGTH_LONG).show();
+                }
             }
         });
         saveBtn.setOnClickListener(new View.OnClickListener(){
@@ -78,11 +100,11 @@ public class MainActivity extends AppCompatActivity {
                         Thread.sleep(5000);
                     }
                     saveImage(((BitmapDrawable)mainImage.getDrawable()).getBitmap(), "redactedImage");
-                    Toast.makeText(getApplicationContext(), "Done!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Done!", Toast.LENGTH_LONG).show();
                 }
                 catch (Exception e)
                 {
-                    Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -102,18 +124,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CAMERA) {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                mainImage.setImageBitmap(bitmap);
-            } else if (requestCode == SELECT_FILE) {
-                mainImage.setImageURI(data.getData());
-            }
-        }
-    }
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -127,7 +137,25 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void saveImage(Bitmap bitmap, @NonNull String name) throws IOException {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) { // getting new image
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeFile(curImagePath);
+                    mainImage.setImageBitmap(bitmap);
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
+                }
+            } else if (requestCode == SELECT_FILE) {
+                mainImage.setImageURI(data.getData());
+            }
+        }
+    }
+
+    private void saveImage(Bitmap bitmap, @NonNull String name) throws IOException { // saving image
         OutputStream fOs;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentResolver resolver = getApplicationContext().getContentResolver();
@@ -145,6 +173,12 @@ public class MainActivity extends AppCompatActivity {
         }
         fOs.flush();
         fOs.close();
+    }
+
+    private File getImageFile() throws IOException {
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = File.createTempFile("photo_", ".png", storageDir);
+        return imageFile;
     }
 
 }
