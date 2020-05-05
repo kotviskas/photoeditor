@@ -40,5 +40,10 @@
         android:name="com.serezha2001.photoeditor.ui.brightnessFragment.brightnessFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_brightness" />
+    <fragment
+        android:id="@+id/four"
+        android:name="com.serezha2001.photoeditor.ui.gallery.FourFragment"
+        android:label="Four"
+        tools:layout="@layout/fragment_four" />
 
 </navigation>

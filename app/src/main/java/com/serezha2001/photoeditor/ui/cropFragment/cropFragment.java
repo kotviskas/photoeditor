@@ -27,39 +27,39 @@ public class cropFragment extends Fragment {
     public Bitmap prevBitmap;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_crop, container, false);
+            View root = inflater.inflate(R.layout.fragment_crop, container, false);
 
-        //Apply = (Button) root.findViewById(R.id.zoomApply);
-       // Undo = (Button) root.findViewById(R.id.zoomUndo);
-        //Undo.setEnabled(false);
-        Coef = (SeekBar) root.findViewById(R.id.zoomCoef);
-        Coef.setMax(19);
-        Coef.setProgress(0);
-        coefView = (TextView)root.findViewById(R.id.coefView);
-        coefView.setText("1x");
+            //Apply = (Button) root.findViewById(R.id.zoomApply);
+            // Undo = (Button) root.findViewById(R.id.zoomUndo);
+            //Undo.setEnabled(false);
+            Coef = (SeekBar) root.findViewById(R.id.zoomCoef);
+            Coef.setMax(19);
+            Coef.setProgress(0);
+            coefView = (TextView)root.findViewById(R.id.coefView);
+            coefView.setText("1x");
 
-        Coef.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            Coef.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if (prevBitmap == null) {
-                    prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
-                   // Undo.setEnabled(true);
                 }
-                int scale = (int)(Coef.getProgress() + 1);
-                coefView.setText(String.valueOf(scale)+"x");
-                imageCrop(scale);
-            }
-        });
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    if (prevBitmap == null) {
+                        prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
+                        // Undo.setEnabled(true);
+                    }
+                    int scale = (int)(Coef.getProgress() + 1);
+                    coefView.setText(String.valueOf(scale)+"x");
+                    imageCrop(scale);
+                }
+            });
 
 /*        Apply.setOnClickListener(new View.OnClickListener(){
             public void onClick (View view){

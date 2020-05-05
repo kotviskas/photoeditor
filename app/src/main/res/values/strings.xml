@@ -10,7 +10,9 @@
     <string name="menu_home">One</string>
     <string name="menu_gallery">Two</string>
     <string name="menu_slideshow">Three</string>
+    <string name="Four">Four</string>
 
     <string name="home_second">Home Second</string>
     <string name="mainimage">mainImage</string>
+
 </resources>
