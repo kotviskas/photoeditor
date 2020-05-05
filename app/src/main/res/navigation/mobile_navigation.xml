@@ -9,7 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.serezha2001.photoeditor.ui.homeFragment.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/homeFragment">
+        tools:layout="@layout/fragment_home">
 
         <action
             android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
@@ -40,4 +40,5 @@
         android:name="com.serezha2001.photoeditor.ui.brightnessFragment.brightnessFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_brightness" />
+
 </navigation>
