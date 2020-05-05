@@ -35,5 +35,15 @@
         android:name="com.serezha2001.photoeditor.ui.five.FiveFragment"
         android:label="Five"
         tools:layout="@layout/fragment_five" />
+    <fragment
+        android:id="@+id/six"
+        android:name="com.serezha2001.photoeditor.ui.six.SixFragment"
+        android:label="Six"
+        tools:layout="@layout/fragment_six" />
+    <fragment
+        android:id="@+id/seven"
+        android:name="com.serezha2001.photoeditor.ui.seven.SevenFragment"
+        android:label="Seven"
+        tools:layout="@layout/fragment_seven" />
 
 </navigation>
