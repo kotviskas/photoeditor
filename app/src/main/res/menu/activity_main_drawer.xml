@@ -20,5 +20,9 @@
             android:id="@+id/four"
             android:icon="@android:drawable/btn_star"
             android:title="Four" />
+        <item
+            android:id="@+id/five"
+            android:icon="@android:drawable/btn_star"
+            android:title="Five" />
     </group>
 </menu>

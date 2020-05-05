@@ -3,37 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_home"
+    >
 
     <fragment
         android:id="@+id/nav_home"
         android:name="com.serezha2001.photoeditor.ui.homeFragment.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
     </fragment>
-    <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.serezha2001.photoeditor.ui.homeFragment.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
-        <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
 
-        <argument
-            android:name="myArg"
-            app:argType="string" />
-    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.serezha2001.photoeditor.ui.cropFragment.cropFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_crop" />
+        tools:layout="@layout/fragment_crop"></fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -45,5 +30,10 @@
         android:name="com.serezha2001.photoeditor.ui.gallery.FourFragment"
         android:label="Four"
         tools:layout="@layout/fragment_four" />
+    <fragment
+        android:id="@+id/five"
+        android:name="com.serezha2001.photoeditor.ui.five.FiveFragment"
+        android:label="Five"
+        tools:layout="@layout/fragment_five" />
 
 </navigation>
