@@ -49,12 +49,10 @@ public class ColorFragment extends Fragment {
             }
         };
         thread.start();
+        
         redSwitch = (Switch)root.findViewById(R.id.redSwitch);
         greenSwitch = (Switch)root.findViewById(R.id.greenSwitch);
         blueSwitch = (Switch)root.findViewById(R.id.blueSwitch);
-
-        //Toast.makeText(getContext(), "Hey", Toast.LENGTH_LONG).show();
-
 
         redSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

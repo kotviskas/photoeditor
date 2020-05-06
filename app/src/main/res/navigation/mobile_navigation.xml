@@ -32,9 +32,9 @@
         tools:layout="@layout/fragment_bnw" />
     <fragment
         android:id="@+id/five"
-        android:name="com.serezha2001.photoeditor.ui.NegativeFragment.NegativeFragment"
+        android:name="com.serezha2001.photoeditor.ui.NegSepFragment.NegSepFragment"
         android:label="@string/menu_negative"
-        tools:layout="@layout/fragment_negative" />
+        tools:layout="@layout/fragment_neg_sep" />
     <fragment
         android:id="@+id/six"
         android:name="com.serezha2001.photoeditor.ui.ColorFragment.ColorFragment"
