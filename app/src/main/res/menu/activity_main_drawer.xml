@@ -32,5 +32,13 @@
             android:id="@+id/seven"
             android:icon="@android:drawable/btn_star"
             android:title="Seven" />
+        <item
+            android:id="@+id/eight"
+            android:icon="@android:drawable/btn_star"
+            android:title="Eight" />
+        <item
+            android:id="@+id/nine"
+            android:icon="@android:drawable/btn_star"
+            android:title="Nine" />
     </group>
 </menu>
