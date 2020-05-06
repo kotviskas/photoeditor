@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.serezha2001.photoeditor.ui.homeFragment.HomeFragment"
+        android:name="com.serezha2001.photoeditor.ui.HomeFragment.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
     </fragment>
@@ -16,30 +16,30 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.serezha2001.photoeditor.ui.cropFragment.cropFragment"
-        android:label="@string/menu_gallery"
+        android:name="com.serezha2001.photoeditor.ui.CropFragment.CropFragment"
+        android:label="@string/menu_crop"
         tools:layout="@layout/fragment_crop"></fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.serezha2001.photoeditor.ui.brightnessFragment.brightnessFragment"
-        android:label="@string/menu_slideshow"
+        android:name="com.serezha2001.photoeditor.ui.BrightnessFragment.BrightnessFragment"
+        android:label="@string/menu_brightness"
         tools:layout="@layout/fragment_brightness" />
     <fragment
         android:id="@+id/four"
-        android:name="com.serezha2001.photoeditor.ui.gallery.FourFragment"
-        android:label="Four"
-        tools:layout="@layout/fragment_four" />
+        android:name="com.serezha2001.photoeditor.ui.BNWFragment.BNWFragment"
+        android:label="@string/menu_black_and_white"
+        tools:layout="@layout/fragment_bnw" />
     <fragment
         android:id="@+id/five"
-        android:name="com.serezha2001.photoeditor.ui.five.FiveFragment"
-        android:label="Five"
-        tools:layout="@layout/fragment_five" />
+        android:name="com.serezha2001.photoeditor.ui.NegativeFragment.NegativeFragment"
+        android:label="@string/menu_negative"
+        tools:layout="@layout/fragment_negative" />
     <fragment
         android:id="@+id/six"
-        android:name="com.serezha2001.photoeditor.ui.six.SixFragment"
-        android:label="Six"
-        tools:layout="@layout/fragment_six" />
+        android:name="com.serezha2001.photoeditor.ui.ColorFragment.ColorFragment"
+        android:label="@string/menu_color"
+        tools:layout="@layout/fragment_color" />
     <fragment
         android:id="@+id/seven"
         android:name="com.serezha2001.photoeditor.ui.seven.SevenFragment"

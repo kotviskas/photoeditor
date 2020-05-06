@@ -1,4 +1,4 @@
-package com.serezha2001.photoeditor.ui.homeFragment;
+package com.serezha2001.photoeditor.ui.NegativeFragment;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -15,13 +15,13 @@ import androidx.fragment.app.Fragment;
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
-public class HomeFragment extends Fragment {
+public class NegativeFragment extends Fragment {
 
     public Button Apply, Undo;
     Bitmap prevBitmap, negBitmap;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_negative, container, false);
 
         Apply = (Button)root.findViewById(R.id.negativeApply);
         Undo = (Button)root.findViewById(R.id.negativeUndo);

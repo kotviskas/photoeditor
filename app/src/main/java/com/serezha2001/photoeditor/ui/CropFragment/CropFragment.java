@@ -1,4 +1,4 @@
-package com.serezha2001.photoeditor.ui.cropFragment;
+package com.serezha2001.photoeditor.ui.CropFragment;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
-public class cropFragment extends Fragment {
+public class CropFragment extends Fragment {
 
 
     //public Button Apply, Undo;

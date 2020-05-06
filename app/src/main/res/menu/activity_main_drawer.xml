@@ -11,23 +11,23 @@
         <item
             android:id="@+id/nav_gallery"
             android:icon="@android:drawable/btn_star"
-            android:title="@string/menu_gallery" />
+            android:title="@string/menu_crop" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@android:drawable/btn_star"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_brightness" />
         <item
             android:id="@+id/four"
             android:icon="@android:drawable/btn_star"
-            android:title="Four" />
+            android:title="@string/menu_black_and_white" />
         <item
             android:id="@+id/five"
             android:icon="@android:drawable/btn_star"
-            android:title="Five" />
+            android:title="@string/menu_negative" />
         <item
             android:id="@+id/six"
             android:icon="@android:drawable/btn_star"
-            android:title="Six" />
+            android:title="Color Effects" />
         <item
             android:id="@+id/seven"
             android:icon="@android:drawable/btn_star"
