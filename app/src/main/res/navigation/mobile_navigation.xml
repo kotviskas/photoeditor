@@ -19,7 +19,11 @@
         android:name="com.serezha2001.photoeditor.ui.CropFragment.CropFragment"
         android:label="@string/menu_crop"
         tools:layout="@layout/fragment_crop"></fragment>
-
+    <fragment
+        android:id="@+id/eight"
+        android:name="com.serezha2001.photoeditor.ui.RotateFragment.RotateFragment"
+        android:label="@string/menu_rotate"
+        tools:layout="@layout/fragment_rotate" />
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.serezha2001.photoeditor.ui.BrightnessFragment.BrightnessFragment"
@@ -45,11 +49,6 @@
         android:name="com.serezha2001.photoeditor.ui.seven.SevenFragment"
         android:label="Seven"
         tools:layout="@layout/fragment_seven" />
-    <fragment
-        android:id="@+id/eight"
-        android:name="com.serezha2001.photoeditor.ui.eight.EightFragment"
-        android:label="Eight"
-        tools:layout="@layout/fragment_eight" />
     <fragment
         android:id="@+id/nine"
         android:name="com.serezha2001.photoeditor.ui.nine.NineFragment"

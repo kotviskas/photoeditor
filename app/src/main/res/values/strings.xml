@@ -13,7 +13,7 @@
     <string name="menu_black_and_white">Black and White</string>
     <string name="menu_negative">Negative and Sepia</string>
     <string name="menu_color">Color Effects</string>
-    <string name="Four">Four</string>
+    <string name="menu_rotate">Rotate</string>
 
     <string name="home_second">Home Second</string>
     <string name="mainimage">mainImage</string>

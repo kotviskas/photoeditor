@@ -18,7 +18,7 @@ import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
 public class NegSepFragment extends Fragment {
-    
+
     public Switch negSwitch, sepiaSwitch;
     public Bitmap prevBitmap, negBitmap, sepiaBitmap;
 

@@ -41,7 +41,7 @@ public class BNWFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                coefView.setText(String.valueOf(seekBar.getProgress() + 50) + "%");
             }
 
             @Override

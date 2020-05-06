@@ -9,12 +9,16 @@
             android:icon="@android:drawable/btn_star"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/eight"
+            android:icon="@android:drawable/ic_menu_rotate"
+            android:title="@string/menu_rotate" />
+        <item
             android:id="@+id/nav_gallery"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@android:drawable/ic_menu_zoom"
             android:title="@string/menu_crop" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@android:drawable/ic_menu_compass"
             android:title="@string/menu_brightness" />
         <item
             android:id="@+id/four"
@@ -32,10 +36,6 @@
             android:id="@+id/seven"
             android:icon="@android:drawable/btn_star"
             android:title="Seven" />
-        <item
-            android:id="@+id/eight"
-            android:icon="@android:drawable/btn_star"
-            android:title="Eight" />
         <item
             android:id="@+id/nine"
             android:icon="@android:drawable/btn_star"

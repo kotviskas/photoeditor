@@ -42,7 +42,7 @@ public class BrightnessFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                coefView.setText(String.valueOf(seekBar.getProgress())+"%");
             }
 
             @Override

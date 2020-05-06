@@ -40,7 +40,7 @@ public class CropFragment extends Fragment {
             Coef.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                    coefView.setText(String.valueOf(Coef.getProgress() + 1)+"x");
                 }
 
                 @Override
