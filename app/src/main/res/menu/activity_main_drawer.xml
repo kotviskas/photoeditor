@@ -38,7 +38,7 @@
             android:title="Seven" />
         <item
             android:id="@+id/nine"
-            android:icon="@android:drawable/btn_star"
-            android:title="Nine" />
+            android:icon="?attr/actionModeShareDrawable"
+            android:title="Spline Interpolation" />
     </group>
 </menu>

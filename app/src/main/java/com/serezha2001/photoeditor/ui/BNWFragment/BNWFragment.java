@@ -36,7 +36,7 @@ public class BNWFragment extends Fragment {
 
         seekBar.setMax(300);
         seekBar.setProgress(50);
-        coefView.setText("100%");
+        coefView.setText("None");
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
