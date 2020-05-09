@@ -35,7 +35,7 @@
         <item
             android:id="@+id/seven"
             android:icon="@android:drawable/btn_star"
-            android:title="Seven" />
+            android:title="Unsharp Masking" />
         <item
             android:id="@+id/nine"
             android:icon="?attr/actionModeShareDrawable"

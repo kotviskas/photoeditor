@@ -31,7 +31,7 @@
 
     <view
         android:id="@+id/view2"
-        class="com.serezha2001.photoeditor.ui.nine.NineFragment$DrawView"
+        class="com.serezha2001.photoeditor.ui.SplineRefactorFragment.SplineInterpFragment$DrawView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"

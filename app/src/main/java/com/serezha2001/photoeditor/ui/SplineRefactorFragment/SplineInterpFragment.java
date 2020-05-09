@@ -1,4 +1,4 @@
-package com.serezha2001.photoeditor.ui.nine;
+package com.serezha2001.photoeditor.ui.SplineRefactorFragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,8 +23,8 @@ import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
 
-public class NineFragment extends Fragment {
-    public Button interpBtn, clearBtn;
+public class SplineInterpFragment extends Fragment {
+    public static Button interpBtn, clearBtn;
     public static Bitmap mBitmap;
     public static Canvas mCanvas;
     public static Path mPath;
@@ -39,9 +39,10 @@ public class NineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final DrawView kek = new DrawView(getActivity());
-        View root = inflater.inflate(R.layout.fragment_nine, container, false);
+        View root = inflater.inflate(R.layout.fragment_spline, container, false);
 
         interpBtn = (Button)root.findViewById(R.id.interpBtn);
+        interpBtn.setEnabled(false);
         clearBtn = (Button)root.findViewById(R.id.clearBtn);
 
         dotPaint = new Paint();
@@ -69,8 +70,9 @@ public class NineFragment extends Fragment {
         clearBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                mCanvas.drawColor(Color.WHITE);
                 k = 0;
+                interpBtn.setEnabled(false);
                 xs = new double[1000];
                 ys = new double[1000];
             }
@@ -131,6 +133,7 @@ public class NineFragment extends Fragment {
                 mCanvas.drawCircle(x, y, 10, dotPaint);
             }
             else {
+                interpBtn.setEnabled(true);
                 mPath.moveTo(x, y);
                 mCanvas.drawCircle(x, y, 10, dotPaint);
                 mPath.lineTo(mX, mY);
@@ -234,7 +237,7 @@ public class NineFragment extends Fragment {
     public static void drawSplines() {
         cubicSpline sp = new cubicSpline();
         sp.getSpline(k);
-        int n = 1000;
+        int n = 10000;
         double h = (xs[k-1] - xs[0])/(n-1);
         double[] spline = new double[n];
         for (int i = 0; i < spline.length; i++) {

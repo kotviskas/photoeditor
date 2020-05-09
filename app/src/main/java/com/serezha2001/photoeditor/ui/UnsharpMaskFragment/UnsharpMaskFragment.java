@@ -1,6 +1,5 @@
-package com.serezha2001.photoeditor.ui.seven;
+package com.serezha2001.photoeditor.ui.UnsharpMaskFragment;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.File;
-
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
-public class SevenFragment extends Fragment {
+public class UnsharpMaskFragment extends Fragment {
 
     public float amount = 0;
     public int radius = 0 , threshold = 0;
@@ -38,7 +34,7 @@ public class SevenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_seven, container, false);
+        View root = inflater.inflate(R.layout.fragment_unsharp_mask, container, false);
 
         srcBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
         usmBitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.ARGB_8888);
