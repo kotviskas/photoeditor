@@ -32,7 +32,7 @@
     <view
         android:id="@+id/view2"
         class="com.serezha2001.photoeditor.ui.SplineRefactorFragment.SplineInterpFragment$DrawView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"

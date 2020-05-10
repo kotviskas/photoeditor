@@ -19,41 +19,6 @@
         layout="@layout/content_main"
         app:layout_anchorGravity="center" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/choosePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:tint="#FFFFFF"
-        app:backgroundTint="#E91E63"
-        app:srcCompat="@drawable/ic_menu_gallery" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/savePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="@dimen/fab_margin"
-        android:tint="#FFFFFF"
-        app:backgroundTint="#E91E63"
-        app:rippleColor="#FFFFFF"
-        app:srcCompat="@drawable/saveicon" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/takePhoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:tint="#FFFFFF"
-        app:backgroundTint="#E91E63"
-        app:fabSize="auto"
-        app:srcCompat="@drawable/ic_menu_camera"
-        app:useCompatPadding="false"
-        android:focusable="true" />
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"

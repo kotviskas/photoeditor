@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -33,18 +32,18 @@ public class SplineInterpFragment extends Fragment {
     public static Paint mPaint;
     public static int k;
     public static double[] xs, ys;
+    private static DrawView kek;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final DrawView kek = new DrawView(getActivity());
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View root = inflater.inflate(R.layout.fragment_spline, container, false);
 
         interpBtn = (Button)root.findViewById(R.id.interpBtn);
         interpBtn.setEnabled(false);
         clearBtn = (Button)root.findViewById(R.id.clearBtn);
-
+        kek = new DrawView(getActivity());
         dotPaint = new Paint();
         dotPaint.setAntiAlias(true);
         dotPaint.setColor(Color.RED);
@@ -62,9 +61,14 @@ public class SplineInterpFragment extends Fragment {
         interpBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                mCanvas.drawColor(Color.WHITE);
                 drawSplines();
-                kek.validateDots();
+                for (int i = 0; i < xs.length; i++){
+                    mCanvas.drawCircle((int)xs[i], (int)ys[i], 10, dotPaint);
+                    //invalidate();
+                    kek.postInvalidate();
+                }
+                kek.postInvalidate();
             }
         });
         clearBtn.setOnClickListener(new View.OnClickListener(){
@@ -75,6 +79,7 @@ public class SplineInterpFragment extends Fragment {
                 interpBtn.setEnabled(false);
                 xs = new double[1000];
                 ys = new double[1000];
+                kek.postInvalidate();
             }
         });
         return root;
@@ -88,14 +93,17 @@ public class SplineInterpFragment extends Fragment {
             context=canvas;
             mPath = new Path();
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+            setWillNotDraw(false);
         }
 
         public DrawView(Context canvas, AttributeSet attrs) {
             super(canvas, attrs);
+            setWillNotDraw(false);
         }
 
         public DrawView(Context canvas, AttributeSet attrs, int defStyle) {
             super(canvas, attrs, defStyle);
+            setWillNotDraw(false);
         }
 
         @Override
@@ -113,13 +121,6 @@ public class SplineInterpFragment extends Fragment {
             super.onDraw(canvas);
             canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
             canvas.drawPath( mPath,  mPaint);
-        }
-
-        protected void validateDots(){
-            for (int i = 0; i < xs.length; i++){
-                mCanvas.drawCircle((int)xs[i], (int)ys[i], 10, dotPaint);
-            }
-            invalidate();
         }
 
         private float mX, mY;
@@ -244,7 +245,6 @@ public class SplineInterpFragment extends Fragment {
             spline[i] = sp.interpolate(xs[0]+i * h);
             mCanvas.drawCircle((int)(xs[0]+i * h), (int)spline[i], 7, mPaint);
         }
-
     }
 
 }
