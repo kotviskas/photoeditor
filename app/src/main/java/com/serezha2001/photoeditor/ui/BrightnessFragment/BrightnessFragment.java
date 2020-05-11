@@ -54,8 +54,8 @@ public class BrightnessFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (prevBitmap == null) {
                     prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
-                    Undo.setEnabled(true);
                 }
+                Undo.setEnabled(true);
                 Coef = (double)(seekBar.getProgress()) / 100;
                 coefView.setText(String.valueOf((int)(Coef * 100))+"%");
                 try {
@@ -71,6 +71,7 @@ public class BrightnessFragment extends Fragment {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
                 seekBar.setProgress(100);
                 coefView.setText("100%");
+                Undo.setEnabled(false);
             }
         });
 

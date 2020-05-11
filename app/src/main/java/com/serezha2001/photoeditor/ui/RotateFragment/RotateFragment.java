@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.serezha2001.photoeditor.R;
 
 public class RotateFragment extends Fragment {
 
+    public Button Undo;
     public SeekBar angle;
     public TextView angleView;
     public Bitmap prevBitmap = null;
@@ -26,6 +28,8 @@ public class RotateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_rotate, container, false);
+        Undo = (Button)root.findViewById(R.id.undo);
+        Undo.setEnabled(false);
         angle = (SeekBar)root.findViewById(R.id.angleSeekbar);
         angleView = (TextView)root.findViewById(R.id.angleView);
         angle.setMax(360);
@@ -50,7 +54,17 @@ public class RotateFragment extends Fragment {
                 }
                 int anglefactor = (int)(angle.getProgress() - 180);
                 angleView.setText(String.valueOf(anglefactor)+" deg");
+                Undo.setEnabled(true);
                 rotateImage(anglefactor);
+            }
+        });
+        Undo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                MainActivity.mainImage.setImageBitmap(prevBitmap);
+                angle.setProgress(180);
+                angleView.setText("0 deg");
+                Undo.setEnabled(false);
             }
         });
 

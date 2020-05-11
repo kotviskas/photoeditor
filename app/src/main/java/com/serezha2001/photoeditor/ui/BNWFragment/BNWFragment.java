@@ -53,8 +53,8 @@ public class BNWFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (prevBitmap == null) {
                     prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
-                    Undo.setEnabled(true);
                 }
+                Undo.setEnabled(true);
                 CoefBnw = (double)(seekBar.getProgress() + 50) / 100;
                 coefView.setText(String.valueOf((int)(CoefBnw * 100)) + "%");
                 try {
@@ -69,7 +69,8 @@ public class BNWFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
                 seekBar.setProgress(50);
-                coefView.setText("100%");
+                coefView.setText("None");
+                Undo.setEnabled(false);
             }
         });
 
