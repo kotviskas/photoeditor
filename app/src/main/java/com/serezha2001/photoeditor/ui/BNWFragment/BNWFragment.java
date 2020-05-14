@@ -3,11 +3,13 @@ package com.serezha2001.photoeditor.ui.BNWFragment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,10 +26,13 @@ public class BNWFragment extends Fragment {
     public SeekBar seekBar;
     public double CoefBnw;
     public Bitmap prevBitmap;
+    public ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_bnw, container, false);
 
+        progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         Undo = (Button)root.findViewById(R.id.Undo);
         coefView = (TextView)root.findViewById(R.id.coefView);
         seekBar = (SeekBar)root.findViewById(R.id.seekBar);
@@ -37,6 +42,34 @@ public class BNWFragment extends Fragment {
         seekBar.setMax(300);
         seekBar.setProgress(50);
         coefView.setText("None");
+
+        class Asynced extends AsyncTask<Void, Void, Void> {
+            Bitmap redactBitmap;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Undo.setVisibility(View.INVISIBLE);
+                seekBar.setVisibility(View.INVISIBLE);
+                coefView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                redactBitmap = bnw(CoefBnw);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                progressBar.setVisibility(View.INVISIBLE);
+                Undo.setVisibility(View.VISIBLE);
+                seekBar.setVisibility(View.VISIBLE);
+                coefView.setVisibility(View.VISIBLE);
+                MainActivity.mainImage.setImageBitmap(redactBitmap);
+            }
+        }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -57,11 +90,8 @@ public class BNWFragment extends Fragment {
                 Undo.setEnabled(true);
                 CoefBnw = (double)(seekBar.getProgress() + 50) / 100;
                 coefView.setText(String.valueOf((int)(CoefBnw * 100)) + "%");
-                try {
-                    bnw(CoefBnw);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Asynced task = new Asynced();
+                task.execute();
             }
         });
         Undo.setOnClickListener(new View.OnClickListener(){
@@ -74,10 +104,12 @@ public class BNWFragment extends Fragment {
             }
         });
 
+
+
         return root;
     }
 
-    void bnw(final double coef) throws InterruptedException {
+    Bitmap bnw(final double coef) {
         final Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final double separator = 255 / coef / 2 * 3;
         Thread thread = new Thread(){
@@ -126,6 +158,7 @@ public class BNWFragment extends Fragment {
         }
         while (thread.isAlive() || thread2.isAlive()) {
         }
-        MainActivity.mainImage.setImageBitmap(redactBitmap);
+        return redactBitmap;
+        //MainActivity.mainImage.setImageBitmap(redactBitmap);
     }
 }

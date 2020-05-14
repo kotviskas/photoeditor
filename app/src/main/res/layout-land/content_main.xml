@@ -11,11 +11,12 @@
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:contentDescription="mainImage"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/mainimage"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
@@ -23,16 +24,13 @@
         android:id="@+id/mainImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="50sp"
-        android:layout_marginTop="47sp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="50sp"
-        android:layout_marginBottom="16sp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="105dp"
+        android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_menu_gallery" />
+        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment"
+        app:srcCompat="@drawable/lenna" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

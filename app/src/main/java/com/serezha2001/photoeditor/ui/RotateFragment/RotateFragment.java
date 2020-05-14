@@ -2,6 +2,7 @@ package com.serezha2001.photoeditor.ui.RotateFragment;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,10 +26,13 @@ public class RotateFragment extends Fragment {
     public SeekBar angle;
     public TextView angleView;
     public Bitmap prevBitmap = null;
+    public ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_rotate, container, false);
+        progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         Undo = (Button)root.findViewById(R.id.undo);
         Undo.setEnabled(false);
         angle = (SeekBar)root.findViewById(R.id.angleSeekbar);
@@ -35,6 +40,34 @@ public class RotateFragment extends Fragment {
         angle.setMax(360);
         angle.setProgress(180);
         angleView.setText("0 deg");
+
+        class Asynced extends AsyncTask<Integer, Void, Void> {
+            Bitmap redactBitmap;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Undo.setVisibility(View.INVISIBLE);
+                angle.setVisibility(View.INVISIBLE);
+                angleView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Integer... angle) {
+                redactBitmap = rotateImage(angle[0]);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                progressBar.setVisibility(View.INVISIBLE);
+                Undo.setVisibility(View.VISIBLE);
+                angle.setVisibility(View.VISIBLE);
+                angleView.setVisibility(View.VISIBLE);
+                MainActivity.mainImage.setImageBitmap(redactBitmap);
+            }
+        }
 
         angle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -55,7 +88,9 @@ public class RotateFragment extends Fragment {
                 int anglefactor = (int)(angle.getProgress() - 180);
                 angleView.setText(String.valueOf(anglefactor)+" deg");
                 Undo.setEnabled(true);
-                rotateImage(anglefactor);
+                Asynced task = new Asynced();
+                task.execute(anglefactor);
+                //rotateImage(anglefactor);
             }
         });
         Undo.setOnClickListener(new View.OnClickListener(){
@@ -71,7 +106,7 @@ public class RotateFragment extends Fragment {
         return root;
     }
 
-    private void rotateImage(int angle) {
+    private Bitmap rotateImage(int angle) {
         final Bitmap rotatedBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final double sin = Math.sin(Math.toRadians(angle)), cos = Math.cos(Math.toRadians(angle)), x0 = 0.5 * (prevBitmap.getWidth() - 1), y0 = 0.5 * (prevBitmap.getHeight() - 1);
         Thread thread1 = new Thread() {
@@ -113,7 +148,8 @@ public class RotateFragment extends Fragment {
         }
         while (thread1.isAlive() || thread2.isAlive()) {
         }
-        MainActivity.mainImage.setImageBitmap(rotatedBitmap);
+        return rotatedBitmap;
+        //MainActivity.mainImage.setImageBitmap(rotatedBitmap);
     }
 
 }

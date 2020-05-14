@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.serezha2001.photoeditor.MainActivity;
@@ -30,33 +32,65 @@ public class UnsharpMaskFragment extends Fragment {
     public Button applyButton;
 
     public Bitmap srcBitmap, usmBitmap;
+    public ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_unsharp_mask, container, false);
 
+        progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         srcBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
         usmBitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
         amountInput = (EditText)root.findViewById(R.id.amountInput);
         radiusInput = (EditText)root.findViewById(R.id.radiusInput);
         thresholdInput = (EditText)root.findViewById(R.id.thresholdInput);
-
         applyButton = (Button)root.findViewById(R.id.applyButton);
+
+        class Asynced extends AsyncTask<Float, Void, Void> {
+            Bitmap redactBitmap;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                amountInput.setVisibility(View.INVISIBLE);
+                radiusInput.setVisibility(View.INVISIBLE);
+                thresholdInput.setVisibility(View.INVISIBLE);
+                applyButton.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Float... coef) {
+                redactBitmap = usm(coef[0], coef[1], Math.round(coef[2]));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                progressBar.setVisibility(View.INVISIBLE);
+                amountInput.setVisibility(View.VISIBLE);
+                radiusInput.setVisibility(View.VISIBLE);
+                thresholdInput.setVisibility(View.VISIBLE);
+                applyButton.setVisibility(View.VISIBLE);
+                MainActivity.mainImage.setImageBitmap(redactBitmap);
+            }
+        }
+
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 try {
                     amount = Integer.valueOf(amountInput.getText().toString());
                     threshold = Integer.valueOf(thresholdInput.getText().toString());
                     radius = Integer.valueOf(radiusInput.getText().toString());
 
-                    usmBitmap = usm(amount, threshold, radius);
-
-                    MainActivity.mainImage.setImageBitmap(usmBitmap);
+                    //usmBitmap = usm(amount, threshold, radius);
+                    Asynced task = new Asynced();
+                    task.execute(amount, (float)threshold, (float)radius);
+                   // MainActivity.mainImage.setImageBitmap(usmBitmap);
                 } catch (NumberFormatException e) {
                     Toast.makeText(getContext(),"vvedi suka koefi",Toast.LENGTH_LONG).show();
                 }

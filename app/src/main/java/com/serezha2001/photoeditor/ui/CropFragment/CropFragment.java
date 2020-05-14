@@ -3,10 +3,12 @@ package com.serezha2001.photoeditor.ui.CropFragment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,18 +26,46 @@ public class CropFragment extends Fragment {
     public SeekBar Coef;
     public TextView coefView;
     public Bitmap prevBitmap;
+    public ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View root = inflater.inflate(R.layout.fragment_crop, container, false);
 
-            //Apply = (Button) root.findViewById(R.id.zoomApply);
-            // Undo = (Button) root.findViewById(R.id.zoomUndo);
-            //Undo.setEnabled(false);
+            progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.INVISIBLE);
             Coef = (SeekBar) root.findViewById(R.id.zoomCoef);
             Coef.setMax(19);
             Coef.setProgress(0);
             coefView = (TextView)root.findViewById(R.id.coefView);
             coefView.setText("1x");
+
+        class Asynced extends AsyncTask<Integer, Void, Void> {
+            Bitmap redactBitmap;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                Coef.setVisibility(View.INVISIBLE);
+                coefView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected Void doInBackground(Integer... angle) {
+                redactBitmap = imageCrop(angle[0]);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                progressBar.setVisibility(View.INVISIBLE);
+                Coef.setVisibility(View.VISIBLE);
+                coefView.setVisibility(View.VISIBLE);
+                if (redactBitmap != null) {
+                    MainActivity.mainImage.setImageBitmap(redactBitmap);
+                }
+            }
+        }
 
             Coef.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
                 @Override
@@ -56,32 +86,16 @@ public class CropFragment extends Fragment {
                     }
                     int scale = (int)(Coef.getProgress() + 1);
                     coefView.setText(String.valueOf(scale)+"x");
-                    imageCrop(scale);
+                    Asynced task = new Asynced();
+                    task.execute(scale);
+                    //imageCrop(scale);
                 }
             });
 
-/*        Apply.setOnClickListener(new View.OnClickListener(){
-            public void onClick (View view){
-                try {
-                    int scale = (int)(Coef.getProgress());
-                    prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
-                    imageCrop(scale);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getContext(), "Enter coefficient", 1000).show();
-                }
-            }
-        });
-        Undo.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                MainActivity.mainImage.setImageBitmap(prevBitmap);
-                Undo.setEnabled(false);
-            }
-        });*/
         return root;
     }
 
-    private void imageCrop(int scale) {
+    private Bitmap imageCrop(int scale) {
         try {
             Bitmap croppedBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
             for (int x = 0, prevx = 0; x < croppedBitmap.getWidth(); x += scale, prevx++){
@@ -95,10 +109,12 @@ public class CropFragment extends Fragment {
                     }
                 }
             }
-            MainActivity.mainImage.setImageBitmap(croppedBitmap);
+            return croppedBitmap;
+            //MainActivity.mainImage.setImageBitmap(croppedBitmap);
             //Undo.setEnabled(true);
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Error! " + e, Toast.LENGTH_SHORT).show();
+            return null;
         }
     }
 }
