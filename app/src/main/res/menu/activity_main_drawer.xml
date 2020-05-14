@@ -40,5 +40,19 @@
             android:id="@+id/nine"
             android:icon="?attr/actionModeShareDrawable"
             android:title="Spline Interpolation" />
+        <item
+            android:id="@+id/ten"
+            android:icon="@android:drawable/btn_star"
+            android:title="Ten" />
+        <item
+            android:id="@+id/eleven"
+            android:icon="@android:drawable/btn_star"
+            android:title="Eleven" />
+        <item
+        android:id="@+id/twelve"
+        android:icon="@android:drawable/btn_star"
+        android:title="Twelve" />
+
+
     </group>
 </menu>

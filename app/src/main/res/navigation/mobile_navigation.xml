@@ -54,5 +54,20 @@
         android:name="com.serezha2001.photoeditor.ui.SplineRefactorFragment.SplineInterpFragment"
         android:label="Spline Interpolation"
         tools:layout="@layout/fragment_spline" />
+    <fragment
+        android:id="@+id/ten"
+        android:name="com.serezha2001.photoeditor.ui.ten.TenFragment"
+        android:label="Spline Interpolation"
+        tools:layout="@layout/fragment_ten" />
+    <fragment
+        android:id="@+id/eleven"
+        android:name="com.serezha2001.photoeditor.ui.eleven.ElevenFragment"
+        android:label="Spline Interpolation"
+        tools:layout="@layout/fragment_eleven" />
+    <fragment
+        android:id="@+id/twelve"
+        android:name="com.serezha2001.photoeditor.ui.twelve.TwelveFragment"
+        android:label="Spline Interpolation"
+        tools:layout="@layout/fragment_twelve" />
 
 </navigation>
