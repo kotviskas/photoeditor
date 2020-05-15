@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,55 +24,64 @@ import com.serezha2001.photoeditor.R;
 
 public class BrightnessFragment extends Fragment {
 
-    public Button Apply, Undo;
     public TextView coefView;
     public SeekBar seekBar;
     public double Coef;
     public Bitmap prevBitmap;
     public ProgressBar progressBar;
+    LinearLayout btnsLayout;
+    Button applyBtn, cancelBtn;
+    Asynced task;
+
+    class Asynced extends AsyncTask<Double, Void, Void> {
+        Bitmap redactBitmap;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            seekBar.setVisibility(View.INVISIBLE);
+            coefView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Double... coef) {
+            redactBitmap = bright(coef[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressBar.setVisibility(View.INVISIBLE);
+            if (redactBitmap != null) {
+                MainActivity.mainImage.setImageBitmap(redactBitmap);
+            }
+            btnsLayout.setVisibility(View.VISIBLE);
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_brightness, container, false);
 
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-        Undo = (Button)root.findViewById(R.id.brightUndo);
         seekBar = (SeekBar)root.findViewById(R.id.brightSeekbar);
         coefView = (TextView)root.findViewById(R.id.coefView);
         prevBitmap = null;
-        Undo.setEnabled(false);
+        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout.setVisibility(View.INVISIBLE);
+        applyBtn = (Button)root.findViewById(R.id.applyBtn);
+        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
 
         seekBar.setMax(1000);
         seekBar.setProgress(100);
         coefView.setText("100%");
 
-        class Asynced extends AsyncTask<Double, Void, Void> {
-            Bitmap redactBitmap;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                Undo.setVisibility(View.INVISIBLE);
-                seekBar.setVisibility(View.INVISIBLE);
-                coefView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-            }
+        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout.setVisibility(View.INVISIBLE);
+        applyBtn = (Button)root.findViewById(R.id.applyBtn);
+        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
 
-            @Override
-            protected Void doInBackground(Double... coef) {
-                redactBitmap = bright(coef[0]);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-                progressBar.setVisibility(View.INVISIBLE);
-                Undo.setVisibility(View.VISIBLE);
-                seekBar.setVisibility(View.VISIBLE);
-                coefView.setVisibility(View.VISIBLE);
-                MainActivity.mainImage.setImageBitmap(redactBitmap);
-            }
-        }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -88,7 +99,6 @@ public class BrightnessFragment extends Fragment {
                 if (prevBitmap == null) {
                     prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
                 }
-                Undo.setEnabled(true);
                 Coef = (double)(seekBar.getProgress()) / 100;
                 coefView.setText(String.valueOf((int)(Coef * 100))+"%");
                 Asynced task = new Asynced();
@@ -96,17 +106,41 @@ public class BrightnessFragment extends Fragment {
 
             }
         });
-        Undo.setOnClickListener(new View.OnClickListener(){
+
+        applyBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                btnsLayout.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                seekBar.setVisibility(View.VISIBLE);
+                coefView.setVisibility(View.VISIBLE);
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
                 seekBar.setProgress(100);
                 coefView.setText("100%");
-                Undo.setEnabled(false);
+                btnsLayout.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                seekBar.setVisibility(View.VISIBLE);
+                coefView.setVisibility(View.VISIBLE);
             }
         });
 
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            task.cancel(true);
+        } catch (Exception e) {
+            //Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
+        }
     }
 
     Bitmap bright(final double coef) {

@@ -7,7 +7,10 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -125,7 +128,8 @@ public class HomeFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
                 try {
-                    MainActivity.mainImage.setImageURI(Uri.parse(curImagePath));
+                    //MainActivity.mainImage.setImageURI(Uri.parse(curImagePath));
+                    rotateImage();
                 } catch (Exception e) {
                     Toast.makeText(getActivity().getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
                 }
@@ -133,6 +137,31 @@ public class HomeFragment extends Fragment {
                 MainActivity.mainImage.setImageURI(data.getData());
             }
         }
+    }
+
+    private void rotateImage() {
+        try {
+            Bitmap temp = BitmapFactory.decodeFile(curImagePath);
+            ExifInterface exifInterface = new ExifInterface(curImagePath);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            Matrix  matrix = new Matrix();
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.setRotate(90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.setRotate(180);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.setRotate(270);
+                    break;
+                default:
+            }
+            MainActivity.mainImage.setImageBitmap(Bitmap.createBitmap(temp, 0, 0, temp.getWidth(), temp.getHeight(), matrix, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void saveImage(Bitmap bitmap, @NonNull String name) throws IOException { // saving image

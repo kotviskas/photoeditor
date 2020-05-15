@@ -21,9 +21,11 @@ import android.widget.Button;
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
+import java.util.Arrays;
+
 
 public class SplineInterpFragment extends Fragment {
-    public static Button interpBtn, clearBtn;
+    public static Button interpBtn, clearBtn, linearBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +36,8 @@ public class SplineInterpFragment extends Fragment {
         interpBtn.setEnabled(false);
         clearBtn = (Button)root.findViewById(R.id.clearBtn);
         clearBtn.setEnabled(false);
-
+        linearBtn = (Button)root.findViewById(R.id.linearBtn);
+        linearBtn.setEnabled(false);
 
         MainActivity.mainImage.setVisibility(View.INVISIBLE);
         interpBtn.setOnClickListener(new View.OnClickListener(){
@@ -51,9 +54,26 @@ public class SplineInterpFragment extends Fragment {
             public void onClick(View v) {
                 drawView.clearScreen();
                 drawView.invalidate();
+                interpBtn.setEnabled(false);
+                linearBtn.setEnabled(false);
+            }
+        });
+        linearBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                drawView.sortDots();
+                drawView.drawLinear();
+                drawView.invalidate();
+                interpBtn.setEnabled(true);
             }
         });
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
     }
 
     class cubicSpline {
@@ -234,10 +254,10 @@ class DrawView extends View {
             SplineInterpFragment.clearBtn.setEnabled(true);
         }
         else {
-            SplineInterpFragment.interpBtn.setEnabled(true);
+            SplineInterpFragment.linearBtn.setEnabled(true);
             mPath.moveTo(x, y);
             mCanvas.drawCircle(x, y, 10, dotPaint);
-            mPath.lineTo(mX, mY);
+           // mPath.lineTo(mX, mY);
             mCanvas.drawPath(mPath, mPaint);
             mX = x;
             mY = y;
@@ -250,8 +270,37 @@ class DrawView extends View {
     }
 
     public void addDots(){
-        for (int i = 0; i < xs.length; i++){
+        for (int i = 0; i < k; i++){
             mCanvas.drawCircle((int)xs[i], (int)ys[i], 10, dotPaint);
+        }
+    }
+
+    public void drawLinear() {
+        for (int i = 1; i < k; i++){
+            mCanvas.drawLine((int)xs[i-1], (int)ys[i-1], (int)xs[i], (int)ys[i], mPaint);
+        }
+    }
+
+    private void swap(double[] array, int ind1, int ind2) {
+        double tmp = array[ind1];
+        array[ind1] = array[ind2];
+        array[ind2] = tmp;
+    }
+
+    public void sortDots() {
+        for (int i = 1; i < k; i++) {
+            if (xs[i] < xs[i - 1]) {
+                swap(xs, i, i-1);
+                swap(ys, i, i-1);
+                for (int z = i - 1; (z - 1) >= 0; z--) {
+                    if (xs[z] < xs[z - 1]) {
+                        swap(xs, z, z-1);
+                        swap(ys, z, z-1);
+                    } else {
+                        break;
+                    }
+                }
+            }
         }
     }
 

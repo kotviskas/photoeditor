@@ -2,12 +2,15 @@ package com.serezha2001.photoeditor.ui.CropFragment;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -21,12 +24,42 @@ import com.serezha2001.photoeditor.R;
 
 public class CropFragment extends Fragment {
 
-
-    //public Button Apply, Undo;
     public SeekBar Coef;
     public TextView coefView;
     public Bitmap prevBitmap;
     public ProgressBar progressBar;
+    LinearLayout btnsLayout;
+    Button applyBtn, cancelBtn;
+    Asynced task;
+
+    class Asynced extends AsyncTask<Integer, Void, Void> {
+        Bitmap redactBitmap;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Coef.setVisibility(View.INVISIBLE);
+            coefView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Integer... angle) {
+            redactBitmap = imageCrop(angle[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressBar.setVisibility(View.INVISIBLE);
+           // Coef.setVisibility(View.VISIBLE);
+           // coefView.setVisibility(View.VISIBLE);
+            if (redactBitmap != null) {
+                MainActivity.mainImage.setImageBitmap(redactBitmap);
+            }
+            btnsLayout.setVisibility(View.VISIBLE);
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View root = inflater.inflate(R.layout.fragment_crop, container, false);
@@ -38,34 +71,10 @@ public class CropFragment extends Fragment {
             Coef.setProgress(0);
             coefView = (TextView)root.findViewById(R.id.coefView);
             coefView.setText("1x");
-
-        class Asynced extends AsyncTask<Integer, Void, Void> {
-            Bitmap redactBitmap;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                Coef.setVisibility(View.INVISIBLE);
-                coefView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected Void doInBackground(Integer... angle) {
-                redactBitmap = imageCrop(angle[0]);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-                progressBar.setVisibility(View.INVISIBLE);
-                Coef.setVisibility(View.VISIBLE);
-                coefView.setVisibility(View.VISIBLE);
-                if (redactBitmap != null) {
-                    MainActivity.mainImage.setImageBitmap(redactBitmap);
-                }
-            }
-        }
+            btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+            btnsLayout.setVisibility(View.INVISIBLE);
+            applyBtn = (Button)root.findViewById(R.id.applyBtn);
+            cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
 
             Coef.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
                 @Override
@@ -86,13 +95,46 @@ public class CropFragment extends Fragment {
                     }
                     int scale = (int)(Coef.getProgress() + 1);
                     coefView.setText(String.valueOf(scale)+"x");
-                    Asynced task = new Asynced();
+                    task = new Asynced();
                     task.execute(scale);
                     //imageCrop(scale);
                 }
             });
 
+        applyBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                btnsLayout.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                Coef.setVisibility(View.VISIBLE);
+                coefView.setVisibility(View.VISIBLE);
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                MainActivity.mainImage.setImageBitmap(prevBitmap);
+                Coef.setProgress(0);
+                coefView.setText("1x");
+                btnsLayout.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                Coef.setVisibility(View.VISIBLE);
+                coefView.setVisibility(View.VISIBLE);
+            }
+        });
+
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            task.cancel(true);
+        } catch (Exception e) {
+            //Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
+        }
     }
 
     private Bitmap imageCrop(int scale) {

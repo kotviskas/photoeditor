@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -33,6 +34,50 @@ public class UnsharpMaskFragment extends Fragment {
 
     public Bitmap srcBitmap, usmBitmap;
     public ProgressBar progressBar;
+    LinearLayout btnsLayout;
+    Button applyBtn, cancelBtn;
+
+    Asynced task;
+
+    class Asynced extends AsyncTask<Float, Void, Void> {
+        Bitmap redactBitmap;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            amountInput.setVisibility(View.INVISIBLE);
+            radiusInput.setVisibility(View.INVISIBLE);
+            thresholdInput.setVisibility(View.INVISIBLE);
+            applyButton.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Float... coef) {
+            redactBitmap = usm(coef[0], coef[1], Math.round(coef[2]));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressBar.setVisibility(View.INVISIBLE);
+            if (redactBitmap != null) {
+                MainActivity.mainImage.setImageBitmap(redactBitmap);
+            }
+            btnsLayout.setVisibility(View.VISIBLE);
+        }
+
+/*        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressBar.setVisibility(View.INVISIBLE);
+            amountInput.setVisibility(View.VISIBLE);
+            radiusInput.setVisibility(View.VISIBLE);
+            thresholdInput.setVisibility(View.VISIBLE);
+            applyButton.setVisibility(View.VISIBLE);
+            MainActivity.mainImage.setImageBitmap(redactBitmap);
+        }*/
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,35 +94,10 @@ public class UnsharpMaskFragment extends Fragment {
         thresholdInput = (EditText)root.findViewById(R.id.thresholdInput);
         applyButton = (Button)root.findViewById(R.id.applyButton);
 
-        class Asynced extends AsyncTask<Float, Void, Void> {
-            Bitmap redactBitmap;
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                amountInput.setVisibility(View.INVISIBLE);
-                radiusInput.setVisibility(View.INVISIBLE);
-                thresholdInput.setVisibility(View.INVISIBLE);
-                applyButton.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected Void doInBackground(Float... coef) {
-                redactBitmap = usm(coef[0], coef[1], Math.round(coef[2]));
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-                progressBar.setVisibility(View.INVISIBLE);
-                amountInput.setVisibility(View.VISIBLE);
-                radiusInput.setVisibility(View.VISIBLE);
-                thresholdInput.setVisibility(View.VISIBLE);
-                applyButton.setVisibility(View.VISIBLE);
-                MainActivity.mainImage.setImageBitmap(redactBitmap);
-            }
-        }
+        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout.setVisibility(View.INVISIBLE);
+        applyBtn = (Button)root.findViewById(R.id.applyBtn);
+        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
 
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +112,7 @@ public class UnsharpMaskFragment extends Fragment {
                     task.execute(amount, (float)threshold, (float)radius);
                    // MainActivity.mainImage.setImageBitmap(usmBitmap);
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getContext(),"vvedi suka koefi",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"Enter coefficients",Toast.LENGTH_LONG).show();
                 }
 
                // if (radius == 0) { radius = 1; }
@@ -102,7 +122,47 @@ public class UnsharpMaskFragment extends Fragment {
 
             }
         });
+
+        applyBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                btnsLayout.setVisibility(View.INVISIBLE);
+                //progressBar.setVisibility(View.INVISIBLE);
+                amountInput.setVisibility(View.VISIBLE);
+                radiusInput.setVisibility(View.VISIBLE);
+                thresholdInput.setVisibility(View.VISIBLE);
+                applyButton.setVisibility(View.VISIBLE);
+
+            }
+        });
+        cancelBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                MainActivity.mainImage.setImageBitmap(srcBitmap);
+
+                btnsLayout.setVisibility(View.INVISIBLE);
+               // progressBar.setVisibility(View.INVISIBLE);
+                amountInput.setVisibility(View.VISIBLE);
+                radiusInput.setVisibility(View.VISIBLE);
+                thresholdInput.setVisibility(View.VISIBLE);
+                applyButton.setVisibility(View.VISIBLE);
+
+            }
+        });
+
         return root;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            task.cancel(true);
+        } catch (Exception e) {
+            //Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
+        }
     }
 
     public static Bitmap boxBlur(Bitmap bmp, int range) {
