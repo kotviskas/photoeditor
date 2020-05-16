@@ -16,16 +16,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 
 public class SplineInterpFragment extends Fragment {
-    public static Button interpBtn, clearBtn, linearBtn;
+    public static Button interpBtn, clearBtn, linearBtn, deleteBtn;
+    public static EditText dotPtr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +42,10 @@ public class SplineInterpFragment extends Fragment {
         clearBtn.setEnabled(false);
         linearBtn = (Button)root.findViewById(R.id.linearBtn);
         linearBtn.setEnabled(false);
+        deleteBtn = (Button)root.findViewById(R.id.deletebtn);
+        dotPtr = (EditText)root.findViewById(R.id.dotPtr);
+        deleteBtn.setVisibility(View.INVISIBLE);
+        dotPtr.setVisibility(View.INVISIBLE);
 
         MainActivity.mainImage.setVisibility(View.INVISIBLE);
         interpBtn.setOnClickListener(new View.OnClickListener(){
@@ -56,6 +64,8 @@ public class SplineInterpFragment extends Fragment {
                 drawView.invalidate();
                 interpBtn.setEnabled(false);
                 linearBtn.setEnabled(false);
+                deleteBtn.setVisibility(View.INVISIBLE);
+                dotPtr.setVisibility(View.INVISIBLE);
             }
         });
         linearBtn.setOnClickListener(new View.OnClickListener(){
@@ -65,6 +75,21 @@ public class SplineInterpFragment extends Fragment {
                 drawView.drawLinear();
                 drawView.invalidate();
                 interpBtn.setEnabled(true);
+            }
+        });
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                int ptr = Integer.valueOf(dotPtr.getText().toString()) - 1;
+                if (ptr < 1 || ptr > drawView.k - 1){
+                    Toast.makeText(getContext(), "There's no dot with your number", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    drawView.deleteDot(ptr);
+                    drawView.mCanvas.drawColor(Color.WHITE);
+                    drawView.addDots();
+                    drawView.invalidate();
+                }
             }
         });
         return root;
@@ -250,13 +275,15 @@ class DrawView extends View {
         if (k == 0){
             mX = x;
             mY = y;
-            mCanvas.drawCircle(x, y, 10, dotPaint);
+            mCanvas.drawCircle(x, y, 5, dotPaint);
             SplineInterpFragment.clearBtn.setEnabled(true);
+            SplineInterpFragment.deleteBtn.setVisibility(View.VISIBLE);
+            SplineInterpFragment.dotPtr.setVisibility(View.VISIBLE);
         }
         else {
             SplineInterpFragment.linearBtn.setEnabled(true);
             mPath.moveTo(x, y);
-            mCanvas.drawCircle(x, y, 10, dotPaint);
+            mCanvas.drawCircle(x, y, 5, dotPaint);
            // mPath.lineTo(mX, mY);
             mCanvas.drawPath(mPath, mPaint);
             mX = x;
@@ -271,7 +298,7 @@ class DrawView extends View {
 
     public void addDots(){
         for (int i = 0; i < k; i++){
-            mCanvas.drawCircle((int)xs[i], (int)ys[i], 10, dotPaint);
+            mCanvas.drawCircle((int)xs[i], (int)ys[i], 5, dotPaint);
         }
     }
 
@@ -302,6 +329,15 @@ class DrawView extends View {
                 }
             }
         }
+    }
+
+    public void deleteDot(int ptr) {
+        for (int i = ptr; i < k - 1; i++) {
+            xs[i] = xs[i+1];
+            ys[i] = ys[i+1];
+        }
+        k--;
+
     }
 
     public void clearScreen(){
