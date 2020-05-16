@@ -24,7 +24,7 @@ import com.serezha2001.photoeditor.R;
 public class UnsharpMaskFragment extends Fragment {
 
     public float amount = 0;
-    public int radius = 0 , threshold = 0;
+    public int radius = 1 , threshold = 1;
 
     public EditText amountInput;
     public EditText radiusInput;
@@ -103,23 +103,28 @@ public class UnsharpMaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    amount = Integer.valueOf(amountInput.getText().toString());
                     threshold = Integer.valueOf(thresholdInput.getText().toString());
+                } catch (NumberFormatException e) {
+                    thresholdInput.setText("1");
+                }
+                try {
                     radius = Integer.valueOf(radiusInput.getText().toString());
-
+                } catch (NumberFormatException e) {
+                    radiusInput.setText("1");
+                }
+                try {
+                    amount = Integer.valueOf(amountInput.getText().toString());
                     //usmBitmap = usm(amount, threshold, radius);
                     Asynced task = new Asynced();
                     task.execute(amount, (float)threshold, (float)radius);
                    // MainActivity.mainImage.setImageBitmap(usmBitmap);
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getContext(),"Enter coefficients",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"Please, enter amount",Toast.LENGTH_LONG).show();
                 }
 
                // if (radius == 0) { radius = 1; }
                // if (threshold == 0) { threshold = 1; }
                // if (amount == 0) { amount = 1; }
-
-
             }
         });
 

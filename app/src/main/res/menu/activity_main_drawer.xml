@@ -51,7 +51,7 @@
         <item
         android:id="@+id/twelve"
         android:icon="@android:drawable/btn_star"
-        android:title="Twelve" />
+        android:title="Blur" />
 
 
     </group>

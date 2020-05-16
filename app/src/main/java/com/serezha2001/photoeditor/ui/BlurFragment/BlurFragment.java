@@ -1,8 +1,7 @@
-package com.serezha2001.photoeditor.ui.twelve;
+package com.serezha2001.photoeditor.ui.BlurFragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,19 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
 
-public class TwelveFragment extends Fragment {
+public class BlurFragment extends Fragment {
 
     public SeekBar radius;
     public TextView radiusView;
@@ -48,7 +45,8 @@ public class TwelveFragment extends Fragment {
         @Override
         protected Void doInBackground(Integer... angle) {
             // redactBitmap = rotateImage(angle[0]);
-            redactBitmap = boxBlur(Bitmap.createBitmap(prevBitmap), (int)(radius.getProgress()) * 2);
+            redactBitmap = boxBlur(Bitmap.createBitmap(prevBitmap), (int)(radius.getProgress()) );
+            redactBitmap = boxBlur(redactBitmap, (int)(radius.getProgress()));
             return null;
         }
 
@@ -65,7 +63,7 @@ public class TwelveFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root =  inflater.inflate(R.layout.fragment_twelve, container, false);
+        View root =  inflater.inflate(R.layout.fragment_blur, container, false);
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         radius = (SeekBar)root.findViewById(R.id.radiusSeekbar);

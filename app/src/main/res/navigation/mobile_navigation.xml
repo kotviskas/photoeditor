@@ -66,8 +66,8 @@
         tools:layout="@layout/fragment_eleven" />
     <fragment
         android:id="@+id/twelve"
-        android:name="com.serezha2001.photoeditor.ui.twelve.TwelveFragment"
-        android:label="Spline Interpolation"
-        tools:layout="@layout/fragment_twelve" />
+        android:name="com.serezha2001.photoeditor.ui.BlurFragment.BlurFragment"
+        android:label="Blur"
+        tools:layout="@layout/fragment_blur" />
 
 </navigation>
