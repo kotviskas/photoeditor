@@ -1,4 +1,4 @@
-package com.serezha2001.photoeditor.ui.SplineRefactorFragment;
+package com.serezha2001.photoeditor.ui.SplineInterpFragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,16 +23,13 @@ import android.widget.Toast;
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 
 public class SplineInterpFragment extends Fragment {
     public static Button interpBtn, clearBtn, linearBtn, deleteBtn;
     public static EditText dotPtr;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_spline, container, false);
         final DrawView drawView = (DrawView)root.findViewById(R.id.drawView);
@@ -52,6 +49,7 @@ public class SplineInterpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 drawView.mCanvas.drawColor(Color.WHITE);
+                drawView.sortDots();
                 drawSplines();
                 drawView.addDots();
                 drawView.invalidate();
@@ -80,15 +78,19 @@ public class SplineInterpFragment extends Fragment {
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                int ptr = Integer.valueOf(dotPtr.getText().toString()) - 1;
-                if (ptr < 1 || ptr > drawView.k - 1){
-                    Toast.makeText(getContext(), "There's no dot with your number", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    drawView.deleteDot(ptr);
-                    drawView.mCanvas.drawColor(Color.WHITE);
-                    drawView.addDots();
-                    drawView.invalidate();
+                try {
+                    int ptr = Integer.valueOf(dotPtr.getText().toString()) - 1;
+                    if (ptr < 0 || ptr > drawView.k - 1){
+                        Toast.makeText(getContext(), "There's no dot with your number", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        drawView.deleteDot(ptr);
+                        drawView.mCanvas.drawColor(Color.WHITE);
+                        drawView.addDots();
+                        drawView.invalidate();
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getContext(), "Enter number", Toast.LENGTH_LONG).show();
                 }
             }
         });

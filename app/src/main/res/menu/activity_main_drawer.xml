@@ -34,8 +34,12 @@
             android:title="@string/menu_color" />
         <item
             android:id="@+id/seven"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@android:drawable/btn_radio"
             android:title="Unsharp Masking" />
+        <item
+            android:id="@+id/twelve"
+            android:icon="@android:drawable/radiobutton_off_background"
+            android:title="Blur" />
         <item
             android:id="@+id/nine"
             android:icon="?attr/actionModeShareDrawable"
@@ -48,10 +52,6 @@
             android:id="@+id/eleven"
             android:icon="@android:drawable/btn_star"
             android:title="Eleven" />
-        <item
-        android:id="@+id/twelve"
-        android:icon="@android:drawable/btn_star"
-        android:title="Blur" />
 
 
     </group>

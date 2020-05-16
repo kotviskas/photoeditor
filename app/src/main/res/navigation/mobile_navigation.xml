@@ -51,7 +51,7 @@
         tools:layout="@layout/fragment_unsharp_mask" />
     <fragment
         android:id="@+id/nine"
-        android:name="com.serezha2001.photoeditor.ui.SplineRefactorFragment.SplineInterpFragment"
+        android:name="com.serezha2001.photoeditor.ui.SplineInterpFragment.SplineInterpFragment"
         android:label="Spline Interpolation"
         tools:layout="@layout/fragment_spline" />
     <fragment

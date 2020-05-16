@@ -70,7 +70,7 @@ public class BlurFragment extends Fragment {
         radiusView = (TextView)root.findViewById(R.id.radiusView);
         radius.setMax(50);
         radius.setProgress(0);
-        radiusView.setText("radius : 0");
+        radiusView.setText("Radius: 0");
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
         applyBtn = (Button)root.findViewById(R.id.applyBtn);
@@ -79,7 +79,7 @@ public class BlurFragment extends Fragment {
         radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                radiusView.setText("radius : " + String.valueOf(radius.getProgress()));
+                radiusView.setText("Radius: " + String.valueOf(radius.getProgress()));
             }
 
             @Override
@@ -92,7 +92,7 @@ public class BlurFragment extends Fragment {
                     prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
                 }
                 int currentRadius = (int)(radius.getProgress());
-                radiusView.setText("radius : " + String.valueOf(currentRadius));
+                radiusView.setText("Radius: " + String.valueOf(currentRadius));
                 Asynced task = new Asynced();
                 task.execute(currentRadius);
             }
