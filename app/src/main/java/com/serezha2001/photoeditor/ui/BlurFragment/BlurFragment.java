@@ -113,7 +113,7 @@ public class BlurFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
                 radius.setProgress(0);
-                radiusView.setText("radius : 0");
+                radiusView.setText("Radius : 0");
                 btnsLayout.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
                 radius.setVisibility(View.VISIBLE);

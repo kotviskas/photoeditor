@@ -56,9 +56,9 @@
         tools:layout="@layout/fragment_spline" />
     <fragment
         android:id="@+id/ten"
-        android:name="com.serezha2001.photoeditor.ui.ten.TenFragment"
-        android:label="Spline Interpolation"
-        tools:layout="@layout/fragment_ten" />
+        android:name="com.serezha2001.photoeditor.ui.RetouchFragment.RetouchFragment"
+        android:label="Retouch"
+        tools:layout="@layout/fragment_retouch" />
     <fragment
         android:id="@+id/eleven"
         android:name="com.serezha2001.photoeditor.ui.eleven.ElevenFragment"

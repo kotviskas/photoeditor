@@ -1,5 +1,9 @@
 package com.serezha2001.photoeditor;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -54,4 +58,41 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    public static float[] getBitmapPositionInsideImageView() {
+        float[] crdnts = new float[7];
+        if (mainImage == null || mainImage.getDrawable() == null)
+            return crdnts;
+
+        float[] f = new float[9];
+        int dens = ((BitmapDrawable)mainImage.getDrawable()).getBitmap().getDensity();
+        float scaleRatio = (float)dens / 160;
+        if (scaleRatio == 0) {
+            scaleRatio = 1;
+        }
+        mainImage.getImageMatrix().getValues(f);
+        final float scaleX = f[Matrix.MSCALE_X];
+        final float scaleY = f[Matrix.MSCALE_Y];
+
+        final Drawable d = mainImage.getDrawable();
+        final int origW = (int)(d.getIntrinsicWidth() / scaleRatio);
+        final int origH = (int)(d.getIntrinsicHeight() / scaleRatio);
+
+        final int actW = Math.round(origW * scaleX * scaleRatio);
+        final int actH = Math.round(origH * scaleY * scaleRatio);
+
+        int imgViewW = mainImage.getWidth();
+        int imgViewH = mainImage.getHeight();
+
+        int top = (int) (imgViewH - actH)/2;
+        int left = (int) (imgViewW - actW)/2;
+        crdnts[0] = left;
+        crdnts[1] = top;
+        crdnts[2] = actW + left;
+        crdnts[3] = actH + top;
+        crdnts[4] = scaleX;
+        crdnts[5] = scaleY;
+        crdnts[6] = scaleRatio;
+        return crdnts;
+    }
 }

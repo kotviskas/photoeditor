@@ -46,8 +46,8 @@
             android:title="Spline Interpolation" />
         <item
             android:id="@+id/ten"
-            android:icon="@android:drawable/btn_star"
-            android:title="Ten" />
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="Retouch" />
         <item
             android:id="@+id/eleven"
             android:icon="@android:drawable/btn_star"

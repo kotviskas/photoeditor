@@ -128,8 +128,8 @@ public class HomeFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
                 try {
-                    //MainActivity.mainImage.setImageURI(Uri.parse(curImagePath));
-                    rotateImage();
+                    MainActivity.mainImage.setImageURI(Uri.parse(curImagePath));
+                    //rotateImage();
                 } catch (Exception e) {
                     Toast.makeText(getActivity().getApplicationContext(), "Error! " + e, Toast.LENGTH_SHORT).show();
                 }
@@ -208,6 +208,7 @@ public class HomeFragment extends Fragment {
                 curImagePath = imageFile.getAbsolutePath();
                 Uri imagePath = FileProvider.getUriForFile(getContext(), "com.serezha2001.photoeditor.fileprovider", imageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imagePath);
+                curImagePath = imagePath.toString();
                 startActivityForResult(intent, REQUEST_CAMERA);
             } else {
                 Toast.makeText(getContext(), "Error! ", Toast.LENGTH_SHORT).show();
