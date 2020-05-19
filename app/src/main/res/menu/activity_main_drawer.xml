@@ -15,7 +15,7 @@
         <item
             android:id="@+id/nav_gallery"
             android:icon="@android:drawable/ic_menu_zoom"
-            android:title="@string/menu_crop" />
+            android:title="@string/menu_zoom" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@android:drawable/ic_menu_compass"
