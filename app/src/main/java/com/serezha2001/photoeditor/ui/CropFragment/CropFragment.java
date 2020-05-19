@@ -24,13 +24,12 @@ import com.serezha2001.photoeditor.R;
 
 public class CropFragment extends Fragment {
 
-    public SeekBar Coef;
-    public TextView coefView;
-    public Bitmap prevBitmap;
-    public ProgressBar progressBar;
-    LinearLayout btnsLayout;
-    Button applyBtn, cancelBtn;
-    Asynced task;
+    private SeekBar Coef;
+    private TextView coefView;
+    private Bitmap prevBitmap;
+    private ProgressBar progressBar;
+    private LinearLayout btnsLayout;
+    private Asynced task;
 
     class Asynced extends AsyncTask<Integer, Void, Void> {
         Bitmap redactBitmap;
@@ -73,8 +72,8 @@ public class CropFragment extends Fragment {
             coefView.setText("1x");
             btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
             btnsLayout.setVisibility(View.INVISIBLE);
-            applyBtn = (Button)root.findViewById(R.id.applyBtn);
-            cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
+        Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
+        Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
             Coef.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
                 @Override

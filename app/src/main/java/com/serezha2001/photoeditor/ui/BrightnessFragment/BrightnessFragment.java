@@ -24,17 +24,16 @@ import com.serezha2001.photoeditor.R;
 
 public class BrightnessFragment extends Fragment {
 
-    public TextView coefView;
-    public SeekBar seekBar;
-    public double Coef;
-    public Bitmap prevBitmap;
-    public ProgressBar progressBar;
-    LinearLayout btnsLayout;
-    Button applyBtn, cancelBtn;
-    Asynced task;
+    private TextView coefView;
+    private SeekBar seekBar;
+    private double Coef;
+    private Bitmap prevBitmap;
+    private ProgressBar progressBar;
+    private LinearLayout btnsLayout;
+    private Asynced task;
 
     class Asynced extends AsyncTask<Double, Void, Void> {
-        Bitmap redactBitmap;
+        Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -45,7 +44,7 @@ public class BrightnessFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Double... coef) {
-            redactBitmap = bright(coef[0]);
+            redactBitmap.setPixels(bright(coef[0]), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
             return null;
         }
 
@@ -70,8 +69,8 @@ public class BrightnessFragment extends Fragment {
         prevBitmap = null;
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
-        applyBtn = (Button)root.findViewById(R.id.applyBtn);
-        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
+        Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
+        Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
         seekBar.setMax(1000);
         seekBar.setProgress(100);
@@ -143,13 +142,16 @@ public class BrightnessFragment extends Fragment {
         }
     }
 
-    Bitmap bright(final double coef) {
-        final Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+    private int[] bright(final double coef) {
+        final int[] pixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
+        final int[] newPixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
+        prevBitmap.getPixels(pixels, 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
         Thread thread = new Thread(){
             public void run(){
-                for (int x = 0; x < (Integer) redactBitmap.getWidth()/3; x++) {
-                    for (int y = 0; y < redactBitmap.getHeight(); y++) {
-                        int prevBitmapPixel = prevBitmap.getPixel(x, y);
+                for (int x = 0; x < (Integer) prevBitmap.getWidth()/3; x++) {
+                    for (int y = 0; y < prevBitmap.getHeight(); y++) {
+                        //int prevBitmapPixel = BrightnessFragment.this.prevBitmap.getPixel(x, y);
+                        int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                         double red = Color.red(prevBitmapPixel) * coef;
                         red = Math.min(255, Math.max(0, red));
                         double green = Color.green(prevBitmapPixel) * coef;
@@ -157,16 +159,16 @@ public class BrightnessFragment extends Fragment {
                         double blue = Color.blue(prevBitmapPixel) * coef;
                         blue = Math.min(255, Math.max(0, blue));
                         int newPixel = Color.rgb((int) red, (int) green, (int) blue);
-                        redactBitmap.setPixel(x, y, newPixel);
+                        newPixels[prevBitmap.getWidth() * y + x] = newPixel;
                     }
                 }
             }
         };
         Thread thread2 = new Thread(){
             public void run(){
-                for (int x = (Integer) redactBitmap.getWidth()/3; x < (Integer) redactBitmap.getWidth()/3*2; x++) {
-                    for (int y = 0; y < redactBitmap.getHeight(); y++) {
-                        int prevBitmapPixel = prevBitmap.getPixel(x, y);
+                for (int x = (Integer) prevBitmap.getWidth()/3; x < (Integer) prevBitmap.getWidth()/3*2; x++) {
+                    for (int y = 0; y < prevBitmap.getHeight(); y++) {
+                        int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                         double red = Color.red(prevBitmapPixel) * coef;
                         red = Math.min(255, Math.max(0, red));
                         double green = Color.green(prevBitmapPixel) * coef;
@@ -174,16 +176,17 @@ public class BrightnessFragment extends Fragment {
                         double blue = Color.blue(prevBitmapPixel) * coef;
                         blue = Math.min(255, Math.max(0, blue));
                         int newPixel = Color.rgb((int) red, (int) green, (int) blue);
-                        redactBitmap.setPixel(x, y, newPixel);
+                        //prevBitmap.setPixel(x, y, newPixel);
+                        newPixels[prevBitmap.getWidth() * y + x] = newPixel;
                     }
                 }
             }
         };
         thread.start();
         thread2.start();
-        for (int x = (Integer) redactBitmap.getWidth()/3*2; x < redactBitmap.getWidth(); x++) {
-            for (int y = 0; y < redactBitmap.getHeight(); y++) {
-                int prevBitmapPixel = prevBitmap.getPixel(x, y);
+        for (int x = (Integer) prevBitmap.getWidth()/3*2; x < prevBitmap.getWidth(); x++) {
+            for (int y = 0; y < prevBitmap.getHeight(); y++) {
+                int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                 double red = Color.red(prevBitmapPixel) * coef;
                 red = Math.min(255, Math.max(0, red));
                 double green = Color.green(prevBitmapPixel) * coef;
@@ -191,12 +194,12 @@ public class BrightnessFragment extends Fragment {
                 double blue = Color.blue(prevBitmapPixel) * coef;
                 blue = Math.min(255, Math.max(0, blue));
                 int newPixel = Color.rgb((int) red, (int) green, (int) blue);
-                redactBitmap.setPixel(x, y, newPixel);
+                newPixels[prevBitmap.getWidth() * y + x] = newPixel;
             }
         }
         while (thread.isAlive() || thread2.isAlive()) {
         }
-        return redactBitmap;
+        return newPixels;
         //MainActivity.mainImage.setImageBitmap(redactBitmap);
     }
 

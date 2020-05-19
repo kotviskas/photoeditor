@@ -10,7 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,7 +38,7 @@ import java.io.OutputStream;
 
 public class HomeFragment extends Fragment {
     private static final int REQUEST_CAMERA = 1, SELECT_FILE = 0, SAVE_PIC = 2;
-    String curImagePath = null;
+    private String curImagePath = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -186,8 +186,7 @@ public class HomeFragment extends Fragment {
 
     private File getImageFile() throws IOException {
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = File.createTempFile("photo_", ".png", storageDir);
-        return imageFile;
+        return File.createTempFile("photo_", ".png", storageDir);
     }
     private void choosePic() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

@@ -25,8 +25,8 @@ import com.serezha2001.photoeditor.R;
 
 
 public class SplineInterpFragment extends Fragment {
-    public static Button interpBtn, clearBtn, linearBtn, deleteBtn;
-    public static EditText dotPtr;
+    static Button interpBtn, clearBtn, linearBtn, deleteBtn;
+    static EditText dotPtr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -103,13 +103,13 @@ public class SplineInterpFragment extends Fragment {
         MainActivity.mainImage.setVisibility(View.VISIBLE);
     }
 
-    class cubicSpline {
-        public class spline {
-            public double a, b, c, d, x;
+    static class cubicSpline {
+        static class spline {
+            double a, b, c, d, x;
         };
         spline[] splines;
 
-        public void getSpline(int n)
+        void getSpline(int n)
         {
             splines = new spline[n];
             for (int i = 0; i < n; ++i){
@@ -125,13 +125,11 @@ public class SplineInterpFragment extends Fragment {
             for (int i = 1; i < n - 1; ++i) {
                 double hi = DrawView.xs[i] - DrawView.xs[i - 1];
                 double hi1 = DrawView.xs[i + 1] - DrawView.xs[i];
-                double A = hi;
                 double C = 2.0 * (hi + hi1);
-                double B = hi1;
                 double F = 6.0 * ((DrawView.ys[i + 1] - DrawView.ys[i]) / hi1 - (DrawView.ys[i] - DrawView.ys[i - 1]) / hi);
-                double z = (A * alpha[i - 1] + C);
-                alpha[i] = -B / z;
-                beta[i] = (F - A * beta[i - 1]) / z;
+                double z = (hi * alpha[i - 1] + C);
+                alpha[i] = -hi1 / z;
+                beta[i] = (F - hi * beta[i - 1]) / z;
             }
 
             for (int i = n - 2; i > 0; --i) {
@@ -145,7 +143,7 @@ public class SplineInterpFragment extends Fragment {
             }
         }
 
-        public double interpolate(double x) {
+        double interpolate(double x) {
             int n = splines.length;
             spline s;
             if (x >= splines[n - 1].x) {
@@ -170,7 +168,7 @@ public class SplineInterpFragment extends Fragment {
             return s.a + (s.b + (s.c / 2.0 + s.d * dx / 6.0) * dx) * dx;
         }
     }
-    public void drawSplines() {
+    private void drawSplines() {
         cubicSpline sp = new cubicSpline();
         sp.getSpline(DrawView.k);
         int n = 10000;
@@ -269,14 +267,11 @@ class DrawView extends View {
         canvas.drawPath( mPath,  mPaint);
     }
 
-    private float mX, mY;
     private void touch_start(float x, float y) {
         mPath.reset();
         xs[k] = x;
         ys[k] = y;
         if (k == 0){
-            mX = x;
-            mY = y;
             mCanvas.drawCircle(x, y, 5, dotPaint);
             SplineInterpFragment.clearBtn.setEnabled(true);
             SplineInterpFragment.deleteBtn.setVisibility(View.VISIBLE);
@@ -288,8 +283,6 @@ class DrawView extends View {
             mCanvas.drawCircle(x, y, 5, dotPaint);
            // mPath.lineTo(mX, mY);
             mCanvas.drawPath(mPath, mPaint);
-            mX = x;
-            mY = y;
         }
         k++;
     }

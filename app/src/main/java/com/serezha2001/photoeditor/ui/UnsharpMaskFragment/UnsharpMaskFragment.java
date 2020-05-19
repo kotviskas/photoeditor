@@ -23,21 +23,20 @@ import com.serezha2001.photoeditor.R;
 
 public class UnsharpMaskFragment extends Fragment {
 
-    public float amount = 0;
-    public int radius = 1 , threshold = 1;
+    private float amount = 0;
+    private int radius = 1 , threshold = 1;
 
-    public EditText amountInput;
-    public EditText radiusInput;
-    public EditText thresholdInput;
+    private EditText amountInput;
+    private EditText radiusInput;
+    private EditText thresholdInput;
 
-    public Button applyButton;
+    private Button applyButton;
 
-    public Bitmap srcBitmap, usmBitmap;
-    public ProgressBar progressBar;
-    LinearLayout btnsLayout;
-    Button applyBtn, cancelBtn;
+    private Bitmap srcBitmap;
+    private ProgressBar progressBar;
+    private LinearLayout btnsLayout;
 
-    Asynced task;
+    private Asynced task;
 
     class Asynced extends AsyncTask<Float, Void, Void> {
         Bitmap redactBitmap;
@@ -66,17 +65,6 @@ public class UnsharpMaskFragment extends Fragment {
             }
             btnsLayout.setVisibility(View.VISIBLE);
         }
-
-/*        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            progressBar.setVisibility(View.INVISIBLE);
-            amountInput.setVisibility(View.VISIBLE);
-            radiusInput.setVisibility(View.VISIBLE);
-            thresholdInput.setVisibility(View.VISIBLE);
-            applyButton.setVisibility(View.VISIBLE);
-            MainActivity.mainImage.setImageBitmap(redactBitmap);
-        }*/
     }
 
     @Override
@@ -87,7 +75,6 @@ public class UnsharpMaskFragment extends Fragment {
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         srcBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
-        usmBitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
         amountInput = (EditText)root.findViewById(R.id.amountInput);
         radiusInput = (EditText)root.findViewById(R.id.radiusInput);
@@ -96,8 +83,8 @@ public class UnsharpMaskFragment extends Fragment {
 
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
-        applyBtn = (Button)root.findViewById(R.id.applyBtn);
-        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
+        Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
+        Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,26 +101,19 @@ public class UnsharpMaskFragment extends Fragment {
                 }
                 try {
                     amount = Integer.valueOf(amountInput.getText().toString());
-                    //usmBitmap = usm(amount, threshold, radius);
                     Asynced task = new Asynced();
                     task.execute(amount, (float)threshold, (float)radius);
-                   // MainActivity.mainImage.setImageBitmap(usmBitmap);
                 } catch (NumberFormatException e) {
                     Toast.makeText(getContext(),"Please, enter amount",Toast.LENGTH_LONG).show();
                 }
 
-               // if (radius == 0) { radius = 1; }
-               // if (threshold == 0) { threshold = 1; }
-               // if (amount == 0) { amount = 1; }
             }
         });
 
         applyBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
                 btnsLayout.setVisibility(View.INVISIBLE);
-                //progressBar.setVisibility(View.INVISIBLE);
                 amountInput.setVisibility(View.VISIBLE);
                 radiusInput.setVisibility(View.VISIBLE);
                 thresholdInput.setVisibility(View.VISIBLE);
@@ -145,14 +125,11 @@ public class UnsharpMaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(srcBitmap);
-
                 btnsLayout.setVisibility(View.INVISIBLE);
-               // progressBar.setVisibility(View.INVISIBLE);
                 amountInput.setVisibility(View.VISIBLE);
                 radiusInput.setVisibility(View.VISIBLE);
                 thresholdInput.setVisibility(View.VISIBLE);
                 applyButton.setVisibility(View.VISIBLE);
-
             }
         });
 
@@ -170,7 +147,7 @@ public class UnsharpMaskFragment extends Fragment {
         }
     }
 
-    public static Bitmap boxBlur(Bitmap bmp, int range) {
+    private Bitmap boxBlur(Bitmap bmp, int range) {
 
         Bitmap blurred = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(blurred);
@@ -189,7 +166,7 @@ public class UnsharpMaskFragment extends Fragment {
         return blurred;
     }
 
-    private static void boxBlurHorizontal(int[] pixels, int w, int h, int halfRange) {
+    private void boxBlurHorizontal(int[] pixels, int w, int h, int halfRange) {
         int index = 0;
         int[] newColors = new int[w];
 
@@ -282,9 +259,7 @@ public class UnsharpMaskFragment extends Fragment {
         }
     }
 
-    public Bitmap usm(final float amount, final float threshold, final int radius) {
-
-        Bitmap backupBitmap = Bitmap.createBitmap(srcBitmap);
+    private Bitmap usm(final float amount, final float threshold, final int radius) {
 
         Bitmap usmBitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.ARGB_8888);
 

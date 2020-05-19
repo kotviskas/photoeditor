@@ -24,16 +24,15 @@ import com.serezha2001.photoeditor.R;
 
 public class BlurFragment extends Fragment {
 
-    public SeekBar radius;
-    public TextView radiusView;
-    public Bitmap prevBitmap = null;
-    public ProgressBar progressBar;
-    LinearLayout btnsLayout;
-    Button applyBtn, cancelBtn;
-    Asynced task;
+    private SeekBar radius;
+    private TextView radiusView;
+    private Bitmap prevBitmap = null;
+    private ProgressBar progressBar;
+    private LinearLayout btnsLayout;
+    private Asynced task;
 
     class Asynced extends AsyncTask<Integer, Void, Void> {
-        Bitmap redactBitmap;
+        Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -44,9 +43,13 @@ public class BlurFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Integer... angle) {
-            // redactBitmap = rotateImage(angle[0]);
-            redactBitmap = boxBlur(Bitmap.createBitmap(prevBitmap), (int)(radius.getProgress()) );
-            redactBitmap = boxBlur(redactBitmap, (int)(radius.getProgress()));
+            final int[] pixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
+
+            prevBitmap.getPixels(pixels, 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
+            redactBitmap.setPixels(boxBlur(pixels, (int)(radius.getProgress())), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
+
+            redactBitmap.getPixels(pixels, 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
+            redactBitmap.setPixels(boxBlur(pixels, (int)(radius.getProgress())), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
             return null;
         }
 
@@ -73,8 +76,8 @@ public class BlurFragment extends Fragment {
         radiusView.setText("Radius: 0");
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
-        applyBtn = (Button)root.findViewById(R.id.applyBtn);
-        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
+        Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
+        Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
         radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -134,26 +137,17 @@ public class BlurFragment extends Fragment {
         }
     }
 
-    public static Bitmap boxBlur(Bitmap bmp, int range) {
-
-        Bitmap blurred = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(blurred);
-
-        int w = bmp.getWidth();
-        int h = bmp.getHeight();
-
-        int[] pixels = new int[bmp.getWidth() * bmp.getHeight()];
-        bmp.getPixels(pixels, 0, w, 0, 0, w, h);
+    private int[] boxBlur(int[] pixels, int range) {
+        int w = prevBitmap.getWidth();
+        int h = prevBitmap.getHeight();
 
         boxBlurHorizontal(pixels, w, h, range / 2);
         boxBlurVertical(pixels, w, h, range / 2);
 
-        c.drawBitmap(pixels, 0, w, 0.0F, 0.0F, w, h, true, null);
-
-        return blurred;
+        return pixels;
     }
 
-    private static void boxBlurHorizontal(int[] pixels, int w, int h, int halfRange) {
+    private void boxBlurHorizontal(int[] pixels, int w, int h, int halfRange) {
         int index = 0;
         int[] newColors = new int[w];
 
@@ -198,7 +192,7 @@ public class BlurFragment extends Fragment {
         }
     }
 
-    private static void boxBlurVertical(int[] pixels, int w, int h, int halfRange) {
+    private void boxBlurVertical(int[] pixels, int w, int h, int halfRange) {
 
         int[] newColors = new int[h];
         int oldPixelOffset = -(halfRange + 1) * w;

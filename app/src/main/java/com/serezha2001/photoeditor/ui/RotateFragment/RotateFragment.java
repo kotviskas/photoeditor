@@ -25,13 +25,12 @@ import com.serezha2001.photoeditor.R;
 
 public class RotateFragment extends Fragment {
 
-    public SeekBar angle;
-    public TextView angleView;
-    public Bitmap prevBitmap = null;
-    public ProgressBar progressBar;
-    LinearLayout btnsLayout;
-    Button applyBtn, cancelBtn;
-    Asynced task;
+    private SeekBar angle;
+    private TextView angleView;
+    private Bitmap prevBitmap = null;
+    private ProgressBar progressBar;
+    private LinearLayout btnsLayout;
+    private Asynced task;
 
     class Asynced extends AsyncTask<Integer, Void, Void> {
         Bitmap redactBitmap;
@@ -45,8 +44,7 @@ public class RotateFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Integer... angle) {
-           // redactBitmap = rotateImage(angle[0]);
-            redactBitmap = rotateImageByMrx(angle[0]);
+            redactBitmap = Bitmap.createBitmap(prevBitmap, 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight(), rotateImageByMrx(angle[0]), true);
             return null;
         }
 
@@ -73,8 +71,8 @@ public class RotateFragment extends Fragment {
         angleView.setText("0 deg");
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
-        applyBtn = (Button)root.findViewById(R.id.applyBtn);
-        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
+        Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
+        Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
         angle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -135,15 +133,15 @@ public class RotateFragment extends Fragment {
         }
     }
 
-    private Bitmap rotateImageByMrx(int angle)
+    private Matrix rotateImageByMrx(int angle)
     {
         double radians = (angle  * Math.PI) / 180.0;
         Matrix matrix = new Matrix();
 
-        float arr[] = {(float)Math.cos(radians), (float)-Math.sin(radians), prevBitmap.getWidth() / 2, (float)Math.sin(radians), (float)Math.cos(radians), prevBitmap.getHeight() / 2, 0.0f, 0.0f, 1.0f};
+        float[] arr = {(float)Math.cos(radians), (float)-Math.sin(radians), prevBitmap.getWidth() / 2, (float)Math.sin(radians), (float)Math.cos(radians), prevBitmap.getHeight() / 2, 0.0f, 0.0f, 1.0f};
         matrix.setValues(arr);
 
-        return (Bitmap.createBitmap(prevBitmap, 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight(), matrix, true));
+        return (matrix);
     }
 
     private Bitmap rotateImage(int angle) {

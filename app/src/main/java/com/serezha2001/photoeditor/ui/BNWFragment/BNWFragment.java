@@ -23,17 +23,16 @@ import com.serezha2001.photoeditor.R;
 
 public class BNWFragment extends Fragment {
 
-    public TextView coefView;
-    public SeekBar seekBar;
-    public double CoefBnw;
-    public Bitmap prevBitmap;
-    public ProgressBar progressBar;
-    LinearLayout btnsLayout;
-    Button applyBtn, cancelBtn;
-    Asynced task;
+    private TextView coefView;
+    private SeekBar seekBar;
+    private double CoefBnw;
+    private Bitmap prevBitmap;
+    private ProgressBar progressBar;
+    private LinearLayout btnsLayout;
+    private Asynced task;
 
     class Asynced extends AsyncTask<Void, Void, Void> {
-        Bitmap redactBitmap;
+        Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -44,7 +43,7 @@ public class BNWFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            redactBitmap = bnw(CoefBnw);
+            redactBitmap.setPixels(bnw(CoefBnw), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
             return null;
         }
 
@@ -76,8 +75,8 @@ public class BNWFragment extends Fragment {
 
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
-        applyBtn = (Button)root.findViewById(R.id.applyBtn);
-        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
+        Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
+        Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -138,19 +137,22 @@ public class BNWFragment extends Fragment {
         }
     }
 
-    Bitmap bnw(final double coef) {
-        final Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+    private int[] bnw(final double coef) {
         final double separator = 255 / coef / 2 * 3;
+        final int[] pixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
+        final int[] newPixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
+        prevBitmap.getPixels(pixels, 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
         Thread thread = new Thread(){
             public void run(){
-                for (int x = 0; x < (Integer) redactBitmap.getWidth()/3; x++) {
-                    for (int y = 0; y < redactBitmap.getHeight(); y++) {
-                        int prevBitmapPixel = prevBitmap.getPixel(x, y);
+                for (int x = 0; x < (Integer) prevBitmap.getWidth()/3; x++) {
+                    for (int y = 0; y < prevBitmap.getHeight(); y++) {
+                        //int prevBitmapPixel = prevBitmap.getPixel(x, y);
+                        int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                         if (Color.red(prevBitmapPixel) + Color.green(prevBitmapPixel) + Color.blue(prevBitmapPixel) > separator) {
-                            redactBitmap.setPixel(x, y, Color.rgb(255, 255, 255));
+                            newPixels[prevBitmap.getWidth() * y + x] = Color.rgb(255, 255, 255);
                         }
                         else {
-                            redactBitmap.setPixel(x, y, Color.rgb(0, 0, 0));
+                            newPixels[prevBitmap.getWidth() * y + x] = Color.rgb(0, 0, 0);
                         }
                     }
                 }
@@ -158,14 +160,14 @@ public class BNWFragment extends Fragment {
         };
         Thread thread2 = new Thread(){
             public void run(){
-                for (int x = (Integer) redactBitmap.getWidth()/3; x < (Integer) redactBitmap.getWidth()/3*2; x++) {
-                    for (int y = 0; y < redactBitmap.getHeight(); y++) {
-                        int prevBitmapPixel = prevBitmap.getPixel(x, y);
+                for (int x = (Integer) prevBitmap.getWidth()/3; x < (Integer) prevBitmap.getWidth()/3*2; x++) {
+                    for (int y = 0; y < prevBitmap.getHeight(); y++) {
+                        int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                         if (Color.red(prevBitmapPixel) + Color.green(prevBitmapPixel) + Color.blue(prevBitmapPixel) > separator) {
-                            redactBitmap.setPixel(x, y, Color.rgb(255, 255, 255));
+                            newPixels[prevBitmap.getWidth() * y + x] = Color.rgb(255, 255, 255);
                         }
                         else {
-                            redactBitmap.setPixel(x, y, Color.rgb(0, 0, 0));
+                            newPixels[prevBitmap.getWidth() * y + x] = Color.rgb(0, 0, 0);
                         }
                     }
                 }
@@ -173,21 +175,19 @@ public class BNWFragment extends Fragment {
         };
         thread.start();
         thread2.start();
-
-        for (int x = (Integer) redactBitmap.getWidth()/3*2; x < redactBitmap.getWidth(); x++) {
-            for (int y = 0; y < redactBitmap.getHeight(); y++) {
-                int prevBitmapPixel = prevBitmap.getPixel(x, y);
+        for (int x = (Integer) prevBitmap.getWidth()/3*2; x < prevBitmap.getWidth(); x++) {
+            for (int y = 0; y < prevBitmap.getHeight(); y++) {
+                int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                 if (Color.red(prevBitmapPixel) + Color.green(prevBitmapPixel) + Color.blue(prevBitmapPixel) > separator) {
-                    redactBitmap.setPixel(x, y, Color.rgb(255, 255, 255));
+                    newPixels[prevBitmap.getWidth() * y + x] = Color.rgb(255, 255, 255);
                 }
                 else {
-                    redactBitmap.setPixel(x, y, Color.rgb(0, 0, 0));
+                    newPixels[prevBitmap.getWidth() * y + x] = Color.rgb(0, 0, 0);
                 }
             }
         }
         while (thread.isAlive() || thread2.isAlive()) {
         }
-        return redactBitmap;
-        //MainActivity.mainImage.setImageBitmap(redactBitmap);
+        return newPixels;
     }
 }

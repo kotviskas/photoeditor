@@ -23,6 +23,9 @@ import android.widget.Toast;
 import com.serezha2001.photoeditor.MainActivity;
 import com.serezha2001.photoeditor.R;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 
 public class RetouchFragment extends Fragment {
     private Bitmap prevBitmap, redactBitmap;
@@ -56,7 +59,7 @@ public class RetouchFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 brushSizeVal.setText("Brush: " + String.valueOf(seekBar.getProgress()));
-                brushSize = seekBar.getProgress();
+                brushSize = seekBar.getProgress() * (int)(prevBitmap.getWidth()/512);
             }
 
             @Override
@@ -67,7 +70,7 @@ public class RetouchFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 brushSizeVal.setText("Brush: " + String.valueOf(seekBar.getProgress()));
-                brushSize = seekBar.getProgress();
+                brushSize = seekBar.getProgress() * (int)(prevBitmap.getWidth()/512);
             }
         });
 
@@ -146,7 +149,14 @@ public class RetouchFragment extends Fragment {
                 if (isCentering){
                    coef = innerCoef + ((Math.abs(2*brushSize) - Math.abs(i) - Math.abs(j)) * 0.01);
                 }
-                redactBitmap.setPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j), Color.rgb((int)(Color.red(prevPixel) + ((averageRed/cnt - Color.red(prevPixel)) * coef)), (int)(Color.green(prevPixel) + ((averageGreen/cnt - Color.green(prevPixel)) * coef)), (int)(Color.blue(prevPixel) + ((averageBlue/cnt - Color.blue(prevPixel)) * coef))));
+                int pixelRed = (int)(Color.red(prevPixel) + ((averageRed/cnt - Color.red(prevPixel)) * coef));
+                int pixelGreen = (int)(Color.green(prevPixel) + ((averageGreen/cnt - Color.green(prevPixel)) * coef));
+                int pixelBlue = (int)(Color.blue(prevPixel) + ((averageBlue/cnt - Color.blue(prevPixel)) * coef));
+
+                pixelRed = (max(0, min(255, pixelRed)));
+                pixelGreen = (max(0, min(255, pixelGreen)));
+                pixelBlue = (max(0, min(255, pixelBlue)));
+                redactBitmap.setPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j), Color.rgb(pixelRed, pixelGreen, pixelBlue));
             }
         }
         MainActivity.mainImage.setImageBitmap(redactBitmap);
