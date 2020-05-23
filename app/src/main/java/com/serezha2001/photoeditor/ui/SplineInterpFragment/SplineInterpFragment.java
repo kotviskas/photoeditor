@@ -297,10 +297,20 @@ class DrawView extends View {
         }
     }
 
-    public void drawLinear() {
+/*    public void drawLinear() {
         for (int i = 1; i < k; i++){
             mCanvas.drawLine((int)xs[i-1], (int)ys[i-1], (int)xs[i], (int)ys[i], mPaint);
         }
+    }*/
+
+    public void drawLinear() {
+        for (int i = 0; i < k; i++) {
+            float k = (float)((ys[i+1] - ys[i]) / (xs[i+1] - xs[i])), b = (float)(ys[i] - k * xs[i]);
+            for (float midx = (float)(xs[i] + 0.05); midx < xs[i+1] - 0.05; midx += 0.05) {
+                mCanvas.drawCircle((int) midx, (int)(k*midx+b), 5, mPaint);
+            }
+        }
+        addDots();
     }
 
     private void swap(double[] array, int ind1, int ind2) {

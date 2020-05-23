@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhotoEditor</string>
+    <string name="app_name">ФоткаEditor</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Photo Editor</string>
@@ -14,11 +14,20 @@
     <string name="menu_negative">Negative and Sepia</string>
     <string name="menu_color">Color Effects</string>
     <string name="menu_rotate">Rotate</string>
-
+    <string name="button_apply">APPLY</string>
+    <string name="button_undo">UNDO</string>
+    <string name="button_cancel">CANCEL</string>
+    <string name="switch_centering">Centering</string>
+    <string name="button_linear">LINEAR</string>
+    <string name="button_interpolate">INTERPOLATE</string>
+    <string name="button_delete">DELETE</string>
+    <string name="button_clear">CLEAR</string>
+    <string name="number_dot">Enter dot number</string>
+    <string name="text_amount">Amount</string>
+    <string name="text_radius">Radius</string>
+    <string name="text_threshold">Threshold</string>
     <string name="home_second">Home Second</string>
     <string name="mainimage">mainImage</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

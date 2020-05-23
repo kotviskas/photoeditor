@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="UNDO" />
+            android:text="@string/button_undo" />
 
     </LinearLayout>
 
@@ -66,7 +66,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView"
             android:textAlignment="center" />
 
         <TextView
@@ -74,7 +73,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView"
             android:textAlignment="center" />
 
         <Switch
@@ -82,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Centering"
+            android:text="@string/switch_centering"
             android:textAlignment="center" />
     </LinearLayout>
 
