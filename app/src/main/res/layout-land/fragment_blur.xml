@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.ZoomFragment.ZoomFragment">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/processBtnsLayout"
@@ -31,6 +30,8 @@
             android:layout_weight="1"
             android:text="@string/button_apply" />
 
+
+
     </LinearLayout>
 
     <ProgressBar
@@ -43,9 +44,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/radiusView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radiusSeekbar" />
+
     <SeekBar
-        android:id="@+id/zoomCoef"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:id="@+id/radiusSeekbar"
+        style="@style/Widget.AppCompat.SeekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -54,14 +64,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/coefView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/zoomCoef" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

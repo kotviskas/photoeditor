@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@drawable/ic_home"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/eight"
@@ -18,11 +18,11 @@
             android:title="@string/menu_zoom" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@android:drawable/ic_menu_compass"
+            android:icon="@drawable/ic_brightness"
             android:title="@string/menu_brightness" />
         <item
             android:id="@+id/four"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@drawable/ic_bnw"
             android:title="@string/menu_black_and_white" />
         <item
             android:id="@+id/five"
@@ -30,15 +30,15 @@
             android:title="@string/menu_negative" />
         <item
             android:id="@+id/six"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@drawable/rgb"
             android:title="@string/menu_color" />
         <item
             android:id="@+id/seven"
-            android:icon="@android:drawable/btn_radio"
+            android:icon="@drawable/ic_unsharp_mask"
             android:title="Unsharp Masking" />
         <item
             android:id="@+id/twelve"
-            android:icon="@android:drawable/radiobutton_off_background"
+            android:icon="@drawable/ic_blur"
             android:title="Blur" />
         <item
             android:id="@+id/nine"

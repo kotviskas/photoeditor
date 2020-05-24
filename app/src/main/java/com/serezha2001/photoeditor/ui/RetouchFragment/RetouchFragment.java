@@ -1,11 +1,13 @@
 package com.serezha2001.photoeditor.ui.RetouchFragment;
 
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ public class RetouchFragment extends Fragment {
     private double coef = 0.1;
     private boolean isCentering = false;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_retouch, container, false);
@@ -105,22 +108,24 @@ public class RetouchFragment extends Fragment {
         MainActivity.mainImage.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                float arr[] = MainActivity.getBitmapPositionInsideImageView();
+                float[] arr = MainActivity.getBitmapPositionInsideImageView();
                 float x = event.getX();
                 float y = event.getY();
                 float scaleFactorX = (arr[2] - arr[0]) / (prevBitmap.getWidth() / arr[6]), scaleFactorY = (arr[3] - arr[1]) / (prevBitmap.getHeight() / arr[6]);
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        retouch((int)((x-arr[0])/scaleFactorX), (int)((y-arr[1])/scaleFactorY), arr[6], coef);
-                        //Toast.makeText(getContext(), (int)((x-arr[0])/scaleFactorX)+" "+(int)((y-arr[1])/scaleFactorY)+" "+arr[6], Toast.LENGTH_LONG).show();
-                        break;
                     case MotionEvent.ACTION_MOVE:
                         retouch((int)((x-arr[0])/scaleFactorX), (int)((y-arr[1])/scaleFactorY), arr[6], coef);
+                        //Toast.makeText(getContext(), (int)((x-arr[0])/scaleFactorX)+" "+(int)((y-arr[1])/scaleFactorY)+" "+arr[6], Toast.LENGTH_LONG).show();
                         break;
                 }
                 return true;
             }
         });
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 
         return root;
     }

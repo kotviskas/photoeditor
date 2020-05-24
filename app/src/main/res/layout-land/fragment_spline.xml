@@ -10,9 +10,35 @@
         android:id="@+id/drawView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout">
+
+        <Button
+            android:id="@+id/deletebtn"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_delete" />
+
+        <EditText
+            android:id="@+id/dotPtr"
+            style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox.Dense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="15"
+            android:hint="@string/number_dot"
+            android:inputType="number" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -24,12 +50,20 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/linearBtn"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_linear" />
+
+        <Button
             android:id="@+id/interpBtn"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="INTERPOLATE" />
+            android:text="@string/button_interpolate" />
 
         <Button
             android:id="@+id/clearBtn"
@@ -37,7 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="CLEAR" />
+            android:text="@string/button_clear" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
