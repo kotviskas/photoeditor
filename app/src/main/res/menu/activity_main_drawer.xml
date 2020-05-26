@@ -50,8 +50,8 @@
             android:title="Retouch" />
         <item
             android:id="@+id/eleven"
-            android:icon="@android:drawable/btn_star"
-            android:title="Eleven" />
+            android:icon="@drawable/ic_cube"
+            android:title="3D Cube" />
 
 
     </group>

@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -194,6 +195,10 @@ public class UnsharpMaskFragment extends Fragment {
                 applyButton.setVisibility(View.VISIBLE);
             }
         });
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 
         return root;
     }
