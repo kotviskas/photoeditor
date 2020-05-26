@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.serezha2001.photoeditor.MainActivity;
@@ -27,9 +28,12 @@ public class UnsharpMaskFragment extends Fragment {
     private float amount = 0;
     private int radius = 1 , threshold = 1;
 
-    private EditText amountInput;
-    private EditText radiusInput;
-    private EditText thresholdInput;
+    private SeekBar radiusInput;
+    private TextView radiusView;
+    private SeekBar amountInput;
+    private TextView amountView;
+    private SeekBar thresholdInput;
+    private TextView thresholdView;
 
     private Button applyButton;
 
@@ -45,8 +49,11 @@ public class UnsharpMaskFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             amountInput.setVisibility(View.INVISIBLE);
+            amountView.setVisibility(View.INVISIBLE);
             radiusInput.setVisibility(View.INVISIBLE);
+            radiusView.setVisibility(View.INVISIBLE);
             thresholdInput.setVisibility(View.INVISIBLE);
+            thresholdView.setVisibility(View.INVISIBLE);
             applyButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
         }
@@ -75,11 +82,25 @@ public class UnsharpMaskFragment extends Fragment {
 
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
+
         srcBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
 
-        amountInput = (EditText)root.findViewById(R.id.amountInput);
-        radiusInput = (EditText)root.findViewById(R.id.radiusInput);
-        thresholdInput = (EditText)root.findViewById(R.id.thresholdInput);
+        amountInput = (SeekBar) root.findViewById(R.id.amountInput);
+        amountView = (TextView) root.findViewById(R.id.amountView);
+        radiusInput = (SeekBar) root.findViewById(R.id.radiusInput);
+        radiusView = (TextView) root.findViewById(R.id.radiusView);
+        thresholdInput = (SeekBar) root.findViewById(R.id.thresholdInput);
+        thresholdView = (TextView) root.findViewById(R.id.thresholdView);
+        radiusInput.setMax(50);
+        radiusInput.setMin(1);
+        radiusInput.setProgress(0);
+        amountInput.setMax(50);
+        amountInput.setProgress(0);
+        thresholdInput.setMax(50);
+        thresholdInput.setProgress(0);
+        radiusView.setText("Radius: 0");
+        amountView.setText("Amount: 0");
+        thresholdView.setText("Treshold: 0");
         applyButton = (Button)root.findViewById(R.id.applyButton);
 
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
@@ -90,24 +111,58 @@ public class UnsharpMaskFragment extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    threshold = Integer.valueOf(thresholdInput.getText().toString());
-                } catch (NumberFormatException e) {
-                    thresholdInput.setText("1");
-                }
-                try {
-                    radius = Integer.valueOf(radiusInput.getText().toString());
-                } catch (NumberFormatException e) {
-                    radiusInput.setText("1");
-                }
-                try {
-                    amount = Integer.valueOf(amountInput.getText().toString());
+
+                    threshold = thresholdInput.getProgress();
+                    radius = radiusInput.getProgress();
+                    amount = amountInput.getProgress();
+
                     Asynced task = new Asynced();
                     task.execute(amount, (float)threshold, (float)radius);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getContext(),"Please, enter amount",Toast.LENGTH_LONG).show();
-                }
+            }
+        });
 
+        radiusInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                radiusView.setText("Radius: " + String.valueOf(radiusInput.getProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        amountInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                amountView.setText("Amount: " + String.valueOf(amountInput.getProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        thresholdInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                thresholdView.setText("Treshold: " + String.valueOf(thresholdInput.getProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
 
@@ -116,8 +171,11 @@ public class UnsharpMaskFragment extends Fragment {
             public void onClick(View v) {
                 btnsLayout.setVisibility(View.INVISIBLE);
                 amountInput.setVisibility(View.VISIBLE);
+                amountView.setVisibility(View.VISIBLE);
                 radiusInput.setVisibility(View.VISIBLE);
+                radiusView.setVisibility(View.VISIBLE);
                 thresholdInput.setVisibility(View.VISIBLE);
+                thresholdView.setVisibility(View.VISIBLE);
                 applyButton.setVisibility(View.VISIBLE);
 
             }
@@ -128,15 +186,14 @@ public class UnsharpMaskFragment extends Fragment {
                 MainActivity.mainImage.setImageBitmap(srcBitmap);
                 btnsLayout.setVisibility(View.INVISIBLE);
                 amountInput.setVisibility(View.VISIBLE);
+                amountView.setVisibility(View.VISIBLE);
                 radiusInput.setVisibility(View.VISIBLE);
+                radiusView.setVisibility(View.VISIBLE);
                 thresholdInput.setVisibility(View.VISIBLE);
+                thresholdView.setVisibility(View.VISIBLE);
                 applyButton.setVisibility(View.VISIBLE);
             }
         });
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 
         return root;
     }
@@ -148,7 +205,6 @@ public class UnsharpMaskFragment extends Fragment {
         try {
             task.cancel(true);
         } catch (Exception e) {
-            //Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
         }
     }
 
