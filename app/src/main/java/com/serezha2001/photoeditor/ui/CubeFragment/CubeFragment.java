@@ -293,8 +293,8 @@ class DrawView extends View {
 
     void scaleCoords() {
         for (CubeFragment.dotVector v : CubeFragment.projected) {
-            v.x *= getWidth()/3;
-            v.y *= getWidth()/3;
+            v.x *= Math.min(getWidth(), getHeight())/3;
+            v.y *= Math.min(getWidth(), getHeight())/3;
         }
     }
 }

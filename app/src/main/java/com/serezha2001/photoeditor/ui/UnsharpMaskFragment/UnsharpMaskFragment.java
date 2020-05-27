@@ -93,7 +93,6 @@ public class UnsharpMaskFragment extends Fragment {
         thresholdInput = (SeekBar) root.findViewById(R.id.thresholdInput);
         thresholdView = (TextView) root.findViewById(R.id.thresholdView);
         radiusInput.setMax(50);
-        radiusInput.setMin(1);
         radiusInput.setProgress(0);
         amountInput.setMax(50);
         amountInput.setProgress(0);
@@ -101,7 +100,7 @@ public class UnsharpMaskFragment extends Fragment {
         thresholdInput.setProgress(0);
         radiusView.setText("Radius: 0");
         amountView.setText("Amount: 0");
-        thresholdView.setText("Treshold: 0");
+        thresholdView.setText("Threshold: 0");
         applyButton = (Button)root.findViewById(R.id.applyButton);
 
         btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
@@ -155,7 +154,7 @@ public class UnsharpMaskFragment extends Fragment {
         thresholdInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                thresholdView.setText("Treshold: " + String.valueOf(thresholdInput.getProgress()));
+                thresholdView.setText("Threshold: " + String.valueOf(thresholdInput.getProgress()));
             }
 
             @Override
@@ -333,8 +332,7 @@ public class UnsharpMaskFragment extends Fragment {
 
         blurBitmap = boxBlur(blurBitmap, radius * 2);
 
-        int srcRed = 0, srcGreen = 0, srcBlue = 0, blurRed = 0, blurGreen = 0, blurBlue = 0;
-        int usmPixel = 0;
+        int srcRed, srcGreen, srcBlue, blurRed, blurGreen, blurBlue, usmPixel;
 
         for (int x = 0;x < srcBitmap.getWidth();x++) {
             for (int y = 0;y < srcBitmap.getHeight();y++) {
