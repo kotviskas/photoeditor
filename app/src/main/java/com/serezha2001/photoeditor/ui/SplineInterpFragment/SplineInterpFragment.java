@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.AttributeSet;
@@ -28,6 +29,7 @@ import com.serezha2001.photoeditor.R;
 public class SplineInterpFragment extends Fragment {
     static Button interpBtn, clearBtn, linearBtn, deleteBtn;
     static EditText dotPtr;
+    static boolean isRedacting = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class SplineInterpFragment extends Fragment {
         interpBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                isRedacting = true;
                 drawView.mCanvas.drawColor(Color.WHITE);
                 drawView.sortDots();
                 drawSplines();
@@ -59,6 +62,7 @@ public class SplineInterpFragment extends Fragment {
         clearBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                isRedacting = false;
                 drawView.clearScreen();
                 drawView.invalidate();
                 interpBtn.setEnabled(false);
@@ -70,6 +74,7 @@ public class SplineInterpFragment extends Fragment {
         linearBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                isRedacting = false;
                 drawView.sortDots();
                 drawView.drawLinear();
                 drawView.invalidate();
@@ -90,6 +95,7 @@ public class SplineInterpFragment extends Fragment {
                         drawView.addDots();
                         drawView.invalidate();
                     }
+                    isRedacting = false;
                 } catch (NumberFormatException e) {
                     Toast.makeText(getContext(), "Enter number", Toast.LENGTH_LONG).show();
                 }
@@ -174,15 +180,17 @@ public class SplineInterpFragment extends Fragment {
             return s.a + (s.b + (s.c / 2.0 + s.d * dx / 6.0) * dx) * dx;
         }
     }
-    private void drawSplines() {
+    static void drawSplines() {
         cubicSpline sp = new cubicSpline();
         sp.getSpline(DrawView.k);
-        int n = 10000;
+        int n = 900;
         double h = (DrawView.xs[DrawView.k-1] - DrawView.xs[0])/(n-1);
         double[] spline = new double[n];
-        for (int i = 0; i < spline.length; i++) {
+        spline[0] = sp.interpolate(DrawView.xs[0]+0 * h);
+        for (int i = 1; i < spline.length; i++) {
             spline[i] = sp.interpolate(DrawView.xs[0]+i * h);
-            DrawView.mCanvas.drawCircle((int)(DrawView.xs[0]+i * h), (int)spline[i], 6, DrawView.mPaint);
+            DrawView.mCanvas.drawLine((float)(DrawView.xs[0]+(i-1) * h), (float)spline[i-1], (float)(DrawView.xs[0]+i * h), (float)spline[i], DrawView.mPaint);
+            //DrawView.mCanvas.drawCircle((int)(DrawView.xs[0]+i * h), (int)spline[i], 6, DrawView.mPaint);
         }
     }
 }
@@ -195,65 +203,23 @@ class DrawView extends View {
     public Paint mBitmapPaint;
     public Paint dotPaint;
     public static Paint mPaint;
-    public static int k;
+    public static int k, dotToChange = 0;
     public static double[] xs, ys;
 
     public DrawView(Context canvas) {
         super(canvas);
         context=canvas;
-        mPath = new Path();
-        dotPaint = new Paint();
-        dotPaint.setAntiAlias(true);
-        dotPaint.setColor(Color.RED);
-        dotPaint.setStyle(Paint.Style.STROKE);
-        dotPaint.setStrokeCap(Paint.Cap.ROUND);
-        dotPaint.setStrokeWidth(15);
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(10);
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        setWillNotDraw(false);
+        initVals();
     }
 
     public DrawView(Context canvas, AttributeSet attrs) {
         super(canvas, attrs);
-        mPath = new Path();
-        dotPaint = new Paint();
-        dotPaint.setAntiAlias(true);
-        dotPaint.setColor(Color.RED);
-        dotPaint.setStyle(Paint.Style.STROKE);
-        dotPaint.setStrokeCap(Paint.Cap.ROUND);
-        dotPaint.setStrokeWidth(15);
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(10);
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        setWillNotDraw(false);
+        initVals();
     }
 
     public DrawView(Context canvas, AttributeSet attrs, int defStyle) {
         super(canvas, attrs, defStyle);
-        mPath = new Path();
-        dotPaint = new Paint();
-        dotPaint.setAntiAlias(true);
-        dotPaint.setColor(Color.RED);
-        dotPaint.setStyle(Paint.Style.STROKE);
-        dotPaint.setStrokeCap(Paint.Cap.ROUND);
-        dotPaint.setStrokeWidth(15);
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(10);
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        setWillNotDraw(false);
+        initVals();
     }
 
     @Override
@@ -273,51 +239,91 @@ class DrawView extends View {
         canvas.drawPath( mPath,  mPaint);
     }
 
+    protected void initVals() {
+        mPath = new Path();
+        dotPaint = new Paint();
+        dotPaint.setAntiAlias(true);
+        dotPaint.setColor(Color.RED);
+        dotPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        dotPaint.setStrokeCap(Paint.Cap.ROUND);
+        dotPaint.setStrokeWidth(20);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(25);
+        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+        setWillNotDraw(false);
+    }
+
     private void touch_start(float x, float y) {
-        mPath.reset();
-        xs[k] = x;
-        ys[k] = y;
-        if (k == 0){
-            mCanvas.drawCircle(x, y, 5, dotPaint);
-            SplineInterpFragment.clearBtn.setEnabled(true);
-            SplineInterpFragment.deleteBtn.setVisibility(View.VISIBLE);
-            SplineInterpFragment.dotPtr.setVisibility(View.VISIBLE);
+        if (!SplineInterpFragment.isRedacting) {
+            mPath.reset();
+            xs[k] = x;
+            ys[k] = y;
+            if (k == 0) {
+                mCanvas.drawCircle(x, y, 5, dotPaint);
+                SplineInterpFragment.clearBtn.setEnabled(true);
+                SplineInterpFragment.deleteBtn.setVisibility(View.VISIBLE);
+                SplineInterpFragment.dotPtr.setVisibility(View.VISIBLE);
+            } else {
+                SplineInterpFragment.linearBtn.setEnabled(true);
+                mPath.moveTo(x, y);
+                mCanvas.drawCircle(x, y, 5, dotPaint);
+                mCanvas.drawPath(mPath, mPaint);
+            }
+            k++;
         }
         else {
-            SplineInterpFragment.linearBtn.setEnabled(true);
-            mPath.moveTo(x, y);
-            mCanvas.drawCircle(x, y, 5, dotPaint);
-           // mPath.lineTo(mX, mY);
-            mCanvas.drawPath(mPath, mPaint);
+            float minDotDist = 10000;
+            for (int i = 0; i < k; i++){
+                if (Math.abs(xs[i] + ys[i] - x - y) < minDotDist) {
+                    minDotDist = (float)Math.abs(xs[i] + ys[i] - x - y);
+                    dotToChange = i;
+                }
+            }
         }
-        k++;
     }
 
     private void touch_up() {
         mPath.reset();
     }
 
-    public void addDots(){
-        for (int i = 0; i < k; i++){
-            mCanvas.drawCircle((int)xs[i], (int)ys[i], 5, dotPaint);
+    private void touch_move(float x, float y) {
+        if (SplineInterpFragment.isRedacting) {
+            xs[dotToChange] = x;
+            ys[dotToChange] = y;
+            sortDots();
+            mCanvas.drawColor(Color.WHITE);
+            SplineInterpFragment.drawSplines();
+            addDots();
         }
     }
 
-/*    public void drawLinear() {
+    public void addDots(){
+        for (int i = 0; i < k; i++){
+            mCanvas.drawCircle((int)xs[i], (int)ys[i], 9, dotPaint);
+        }
+    }
+
+    public void drawLinear() {
+        mCanvas.drawColor(Color.WHITE);
         for (int i = 1; i < k; i++){
             mCanvas.drawLine((int)xs[i-1], (int)ys[i-1], (int)xs[i], (int)ys[i], mPaint);
         }
-    }*/
+        addDots();
+    }
 
-    public void drawLinear() {
+    /*public void drawLinear() {
         for (int i = 0; i < k; i++) {
-            float k = (float)((ys[i+1] - ys[i]) / (xs[i+1] - xs[i])), b = (float)(ys[i] - k * xs[i]);
-            for (float midx = (float)(xs[i] + 0.05); midx < xs[i+1] - 0.05; midx += 0.05) {
-                mCanvas.drawCircle((int) midx, (int)(k*midx+b), 5, mPaint);
+            float k = (float) ((ys[i + 1] - ys[i]) / (xs[i + 1] - xs[i])), b = (float) (ys[i] - k * xs[i]);
+            for (float midx = (float) (xs[i] + 0.05); midx < xs[i + 1] - 0.05; midx += 0.05) {
+                mCanvas.drawCircle((int) midx, (int) (k * midx + b), 5, mPaint);
             }
         }
         addDots();
-    }
+    }*/
 
     private void swap(double[] array, int ind1, int ind2) {
         double tmp = array[ind1];
@@ -374,6 +380,11 @@ class DrawView extends View {
                 touch_up();
                 invalidate();
                 break;
+            case MotionEvent.ACTION_MOVE:
+                touch_move(x, y);
+                invalidate();
+                break;
+
         }
         return true;
     }
