@@ -68,6 +68,7 @@ public class BlurFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_blur, container, false);
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         radius = (SeekBar)root.findViewById(R.id.radiusSeekbar);

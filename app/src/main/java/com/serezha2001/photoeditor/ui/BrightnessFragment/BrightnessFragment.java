@@ -62,7 +62,7 @@ public class BrightnessFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_brightness, container, false);
-
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         seekBar = (SeekBar)root.findViewById(R.id.brightSeekbar);

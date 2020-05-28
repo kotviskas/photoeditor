@@ -113,14 +113,8 @@ public class CubeFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-
+        
         return root;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        MainActivity.mainImage.setVisibility(View.VISIBLE);
     }
 
     void drawCube(DrawView drawView) {

@@ -109,12 +109,6 @@ public class SplineInterpFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        MainActivity.mainImage.setVisibility(View.VISIBLE);
-    }
-
     static class cubicSpline {
         static class spline {
             double a, b, c, d, x;
@@ -255,6 +249,7 @@ class DrawView extends View {
         mPaint.setStrokeWidth(25);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         setWillNotDraw(false);
+        SplineInterpFragment.isRedacting = false;
     }
 
     private void touch_start(float x, float y) {

@@ -40,6 +40,7 @@ public class RetouchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_retouch, container, false);
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
         redactBitmap = prevBitmap;
         redactBitmap = redactBitmap.copy(redactBitmap.getConfig(), true);

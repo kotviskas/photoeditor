@@ -65,7 +65,7 @@ public class NegSepFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_neg_sep, container, false);
 
         prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
-
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         negSwitch = (Switch)root.findViewById(R.id.negSwitch);
         sepiaSwitch = (Switch)root.findViewById(R.id.sepiaSwitch);
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);

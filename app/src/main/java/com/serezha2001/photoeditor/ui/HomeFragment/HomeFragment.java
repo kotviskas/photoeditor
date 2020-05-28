@@ -12,7 +12,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +44,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         FloatingActionButton choosePic = root.findViewById(R.id.choosePic);
         FloatingActionButton camButton = root.findViewById(R.id.takePhoto);
         FloatingActionButton saveBtn = root.findViewById(R.id.savePic);
@@ -145,7 +144,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void rotateImage() {
+    /*private void rotateImage() {
         try {
             Bitmap temp = BitmapFactory.decodeFile(curImagePath);
             ExifInterface exifInterface = new ExifInterface(curImagePath);
@@ -168,7 +167,7 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     private void saveImage(Bitmap bitmap, @NonNull String name) throws IOException { // saving image
         OutputStream fOs;

@@ -63,6 +63,7 @@ public class RotateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_rotate, container, false);
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         angle = (SeekBar)root.findViewById(R.id.angleSeekbar);

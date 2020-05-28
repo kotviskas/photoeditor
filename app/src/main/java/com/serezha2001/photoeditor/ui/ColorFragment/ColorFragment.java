@@ -71,7 +71,7 @@ public class ColorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root =  inflater.inflate(R.layout.fragment_color, container, false);
         prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
-        
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         redSwitch = (Switch)root.findViewById(R.id.redSwitch);
         greenSwitch = (Switch)root.findViewById(R.id.greenSwitch);
         blueSwitch = (Switch)root.findViewById(R.id.blueSwitch);

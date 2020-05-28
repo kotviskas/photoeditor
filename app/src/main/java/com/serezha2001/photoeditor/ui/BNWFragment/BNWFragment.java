@@ -63,7 +63,7 @@ public class BNWFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_bnw, container, false);
-
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         coefView = (TextView)root.findViewById(R.id.coefView);

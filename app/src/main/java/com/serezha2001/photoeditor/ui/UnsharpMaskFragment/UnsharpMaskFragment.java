@@ -80,7 +80,7 @@ public class UnsharpMaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_unsharp_mask, container, false);
-
+        MainActivity.mainImage.setVisibility(View.VISIBLE);
         progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
