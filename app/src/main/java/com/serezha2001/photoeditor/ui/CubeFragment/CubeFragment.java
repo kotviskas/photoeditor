@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 
 import com.serezha2001.photoeditor.MainActivity;
@@ -59,6 +60,7 @@ public class CubeFragment extends Fragment {
         seekBarY.setProgress(180);
         seekBarZ.setMax(360);
         seekBarZ.setProgress(180);
+        Toast.makeText(getContext(), "Change one of the axes with the slider to draw a cube!", Toast.LENGTH_LONG).show();
 
         points = new dotVector[8];
         points[0] = new dotVector(-0.5, -0.5, -0.5);

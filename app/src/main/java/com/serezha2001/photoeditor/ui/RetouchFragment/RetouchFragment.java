@@ -141,28 +141,32 @@ public class RetouchFragment extends Fragment {
         int averageRed = 0, averageGreen = 0, averageBlue = 0, cnt = 0;
         for (int i = -brushSize; i < brushSize + 1 && ((int)(x*scaleRatio) + i) < redactBitmap.getWidth() && ((int)(x*scaleRatio) + i) >=0; i++){
             for (int j = -brushSize; j < brushSize + 1 && ((int)(y*scaleRatio) + j) < redactBitmap.getHeight() && ((int)(y*scaleRatio) + j) >= 0; j++){
-                int prevPixel = redactBitmap.getPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j));
-                averageRed += Color.red(prevPixel);
-                averageGreen += Color.green(prevPixel);
-                averageBlue += Color.blue(prevPixel);
-                cnt++;
+                if (Math.sqrt(i*i + j*j) < brushSize) {
+                    int prevPixel = redactBitmap.getPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j));
+                    averageRed += Color.red(prevPixel);
+                    averageGreen += Color.green(prevPixel);
+                    averageBlue += Color.blue(prevPixel);
+                    cnt++;
+                }
             }
         }
         for (int i = -brushSize; i < brushSize + 1 && ((int)(x*scaleRatio) + i) < redactBitmap.getWidth() && ((int)(x*scaleRatio) + i) >=0; i++){
             for (int j = -brushSize; j < brushSize + 1 && ((int)(y*scaleRatio) + j) < redactBitmap.getHeight() && ((int)(y*scaleRatio) + j) >= 0; j++){
-                int prevPixel = redactBitmap.getPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j));
-                double coef = innerCoef;
-                if (isCentering){
-                   coef = innerCoef + ((Math.abs(2*brushSize) - Math.abs(i) - Math.abs(j)) * 0.01);
-                }
-                int pixelRed = (int)(Color.red(prevPixel) + ((averageRed/cnt - Color.red(prevPixel)) * coef));
-                int pixelGreen = (int)(Color.green(prevPixel) + ((averageGreen/cnt - Color.green(prevPixel)) * coef));
-                int pixelBlue = (int)(Color.blue(prevPixel) + ((averageBlue/cnt - Color.blue(prevPixel)) * coef));
+                if (Math.sqrt(i*i + j*j) < brushSize) {
+                    int prevPixel = redactBitmap.getPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j));
+                    double coef = innerCoef;
+                    if (isCentering){
+                        coef = innerCoef + ((Math.abs(2*brushSize) - Math.abs(i) - Math.abs(j)) * 0.01);
+                    }
+                    int pixelRed = (int)(Color.red(prevPixel) + ((averageRed/cnt - Color.red(prevPixel)) * coef));
+                    int pixelGreen = (int)(Color.green(prevPixel) + ((averageGreen/cnt - Color.green(prevPixel)) * coef));
+                    int pixelBlue = (int)(Color.blue(prevPixel) + ((averageBlue/cnt - Color.blue(prevPixel)) * coef));
 
-                pixelRed = (max(0, min(255, pixelRed)));
-                pixelGreen = (max(0, min(255, pixelGreen)));
-                pixelBlue = (max(0, min(255, pixelBlue)));
-                redactBitmap.setPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j), Color.rgb(pixelRed, pixelGreen, pixelBlue));
+                    pixelRed = (max(0, min(255, pixelRed)));
+                    pixelGreen = (max(0, min(255, pixelGreen)));
+                    pixelBlue = (max(0, min(255, pixelBlue)));
+                    redactBitmap.setPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j), Color.rgb(pixelRed, pixelGreen, pixelBlue));
+                }
             }
         }
         MainActivity.mainImage.setImageBitmap(redactBitmap);

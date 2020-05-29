@@ -47,6 +47,8 @@ public class SplineInterpFragment extends Fragment {
         deleteBtn.setVisibility(View.INVISIBLE);
         dotPtr.setVisibility(View.INVISIBLE);
 
+        Toast.makeText(getContext(), "Tap to add a point!\nYou can move points after interpolation.", Toast.LENGTH_LONG).show();
+
         MainActivity.mainImage.setVisibility(View.INVISIBLE);
         interpBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -273,8 +275,10 @@ class DrawView extends View {
         else {
             float minDotDist = 10000;
             for (int i = 0; i < k; i++){
-                if (Math.abs(xs[i] + ys[i] - x - y) < minDotDist) {
-                    minDotDist = (float)Math.abs(xs[i] + ys[i] - x - y);
+                //if (Math.abs(xs[i] + ys[i] - x - y) < minDotDist) {
+                if (Math.sqrt((xs[i]-x)*(xs[i]-x) + (ys[i]-y)*(ys[i]-y)) < minDotDist) {
+                    //minDotDist = (float)Math.abs(xs[i] + ys[i] - x - y);
+                    minDotDist = (float)Math.sqrt((xs[i]-x)*(xs[i]-x) + (ys[i]-y)*(ys[i]-y));
                     dotToChange = i;
                 }
             }
