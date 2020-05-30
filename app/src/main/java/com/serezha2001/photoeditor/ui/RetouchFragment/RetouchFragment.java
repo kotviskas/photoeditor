@@ -41,11 +41,11 @@ public class RetouchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_retouch, container, false);
         MainActivity.mainImage.setVisibility(View.VISIBLE);
-        prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
+        prevBitmap = ((BitmapDrawable) MainActivity.mainImage.getDrawable()).getBitmap();
         redactBitmap = prevBitmap;
         redactBitmap = redactBitmap.copy(redactBitmap.getConfig(), true);
-        brushSizeVal = (TextView)root.findViewById(R.id.brushSize);
-        coefVal = (TextView)root.findViewById(R.id.coef);
+        brushSizeVal = (TextView) root.findViewById(R.id.brushSize);
+        coefVal = (TextView) root.findViewById(R.id.coef);
         SeekBar brushSizeSeekbar = (SeekBar) root.findViewById(R.id.brushSizeSeekbar);
         SeekBar coefSeekbar = (SeekBar) root.findViewById(R.id.coefSeekbar);
         Button undoBtn = (Button) root.findViewById(R.id.undoBtn);
@@ -59,11 +59,11 @@ public class RetouchFragment extends Fragment {
             }
         });
 
-        brushSizeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        brushSizeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 brushSizeVal.setText("Brush: " + String.valueOf(seekBar.getProgress()));
-                brushSize = seekBar.getProgress() * (int)(prevBitmap.getWidth()/512);
+                brushSize = seekBar.getProgress() * (int) (prevBitmap.getWidth() / 512);
             }
 
             @Override
@@ -74,15 +74,15 @@ public class RetouchFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 brushSizeVal.setText("Brush: " + String.valueOf(seekBar.getProgress()));
-                brushSize = seekBar.getProgress() * (int)(prevBitmap.getWidth()/512);
+                brushSize = seekBar.getProgress() * (int) (prevBitmap.getWidth() / 512);
             }
         });
 
-        coefSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        coefSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                coefVal.setText("Coef: " + String.valueOf((double)seekBar.getProgress()/10));
-                coef = (double)seekBar.getProgress()/10;
+                coefVal.setText("Coef: " + String.valueOf((double) seekBar.getProgress() / 10));
+                coef = (double) seekBar.getProgress() / 10;
             }
 
             @Override
@@ -92,12 +92,12 @@ public class RetouchFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                coefVal.setText("Coef: " + String.valueOf((double)seekBar.getProgress()/10));
-                coef = (double)seekBar.getProgress()/10;
+                coefVal.setText("Coef: " + String.valueOf((double) seekBar.getProgress() / 10));
+                coef = (double) seekBar.getProgress() / 10;
             }
         });
 
-        undoBtn.setOnClickListener(new View.OnClickListener(){
+        undoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
@@ -106,7 +106,7 @@ public class RetouchFragment extends Fragment {
             }
         });
 
-        MainActivity.mainImage.setOnTouchListener(new View.OnTouchListener(){
+        MainActivity.mainImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 float[] arr = MainActivity.getBitmapPositionInsideImageView();
@@ -116,7 +116,7 @@ public class RetouchFragment extends Fragment {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                     case MotionEvent.ACTION_MOVE:
-                        retouch((int)((x-arr[0])/scaleFactorX), (int)((y-arr[1])/scaleFactorY), arr[6], coef);
+                        retouch((int) ((x - arr[0]) / scaleFactorX), (int) ((y - arr[1]) / scaleFactorY), arr[6], coef);
                         //Toast.makeText(getContext(), (int)((x-arr[0])/scaleFactorX)+" "+(int)((y-arr[1])/scaleFactorY)+" "+arr[6], Toast.LENGTH_LONG).show();
                         break;
                 }
@@ -139,10 +139,10 @@ public class RetouchFragment extends Fragment {
 
     private void retouch(int x, int y, float scaleRatio, double innerCoef) {
         int averageRed = 0, averageGreen = 0, averageBlue = 0, cnt = 0;
-        for (int i = -brushSize; i < brushSize + 1 && ((int)(x*scaleRatio) + i) < redactBitmap.getWidth() && ((int)(x*scaleRatio) + i) >=0; i++){
-            for (int j = -brushSize; j < brushSize + 1 && ((int)(y*scaleRatio) + j) < redactBitmap.getHeight() && ((int)(y*scaleRatio) + j) >= 0; j++){
-                if (Math.sqrt(i*i + j*j) < brushSize) {
-                    int prevPixel = redactBitmap.getPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j));
+        for (int i = -brushSize; i < brushSize + 1 && ((int) (x * scaleRatio) + i) < redactBitmap.getWidth() && ((int) (x * scaleRatio) + i) >= 0; i++) {
+            for (int j = -brushSize; j < brushSize + 1 && ((int) (y * scaleRatio) + j) < redactBitmap.getHeight() && ((int) (y * scaleRatio) + j) >= 0; j++) {
+                if (Math.sqrt(i * i + j * j) < brushSize) {
+                    int prevPixel = redactBitmap.getPixel(((int) (x * scaleRatio) + i), ((int) (y * scaleRatio) + j));
                     averageRed += Color.red(prevPixel);
                     averageGreen += Color.green(prevPixel);
                     averageBlue += Color.blue(prevPixel);
@@ -150,22 +150,22 @@ public class RetouchFragment extends Fragment {
                 }
             }
         }
-        for (int i = -brushSize; i < brushSize + 1 && ((int)(x*scaleRatio) + i) < redactBitmap.getWidth() && ((int)(x*scaleRatio) + i) >=0; i++){
-            for (int j = -brushSize; j < brushSize + 1 && ((int)(y*scaleRatio) + j) < redactBitmap.getHeight() && ((int)(y*scaleRatio) + j) >= 0; j++){
-                if (Math.sqrt(i*i + j*j) < brushSize) {
-                    int prevPixel = redactBitmap.getPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j));
+        for (int i = -brushSize; i < brushSize + 1 && ((int) (x * scaleRatio) + i) < redactBitmap.getWidth() && ((int) (x * scaleRatio) + i) >= 0; i++) {
+            for (int j = -brushSize; j < brushSize + 1 && ((int) (y * scaleRatio) + j) < redactBitmap.getHeight() && ((int) (y * scaleRatio) + j) >= 0; j++) {
+                if (Math.sqrt(i * i + j * j) < brushSize) {
+                    int prevPixel = redactBitmap.getPixel(((int) (x * scaleRatio) + i), ((int) (y * scaleRatio) + j));
                     double coef = innerCoef;
-                    if (isCentering){
-                        coef = innerCoef + ((Math.abs(2*brushSize) - Math.abs(i) - Math.abs(j)) * 0.01);
+                    if (isCentering) {
+                        coef = innerCoef + ((Math.abs(2 * brushSize) - Math.abs(i) - Math.abs(j)) * 0.01);
                     }
-                    int pixelRed = (int)(Color.red(prevPixel) + ((averageRed/cnt - Color.red(prevPixel)) * coef));
-                    int pixelGreen = (int)(Color.green(prevPixel) + ((averageGreen/cnt - Color.green(prevPixel)) * coef));
-                    int pixelBlue = (int)(Color.blue(prevPixel) + ((averageBlue/cnt - Color.blue(prevPixel)) * coef));
+                    int pixelRed = (int) (Color.red(prevPixel) + ((averageRed / cnt - Color.red(prevPixel)) * coef));
+                    int pixelGreen = (int) (Color.green(prevPixel) + ((averageGreen / cnt - Color.green(prevPixel)) * coef));
+                    int pixelBlue = (int) (Color.blue(prevPixel) + ((averageBlue / cnt - Color.blue(prevPixel)) * coef));
 
                     pixelRed = (max(0, min(255, pixelRed)));
                     pixelGreen = (max(0, min(255, pixelGreen)));
                     pixelBlue = (max(0, min(255, pixelBlue)));
-                    redactBitmap.setPixel(((int)(x*scaleRatio) + i), ((int)(y*scaleRatio) + j), Color.rgb(pixelRed, pixelGreen, pixelBlue));
+                    redactBitmap.setPixel(((int) (x * scaleRatio) + i), ((int) (y * scaleRatio) + j), Color.rgb(pixelRed, pixelGreen, pixelBlue));
                 }
             }
         }

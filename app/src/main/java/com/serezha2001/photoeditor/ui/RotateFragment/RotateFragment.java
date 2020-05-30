@@ -35,6 +35,7 @@ public class RotateFragment extends Fragment {
 
     class Asynced extends AsyncTask<Integer, Void, Void> {
         Bitmap redactBitmap;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -62,24 +63,24 @@ public class RotateFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root =  inflater.inflate(R.layout.fragment_rotate, container, false);
+        View root = inflater.inflate(R.layout.fragment_rotate, container, false);
         MainActivity.mainImage.setVisibility(View.VISIBLE);
-        progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-        angle = (SeekBar)root.findViewById(R.id.angleSeekbar);
-        angleView = (TextView)root.findViewById(R.id.angleView);
+        angle = (SeekBar) root.findViewById(R.id.angleSeekbar);
+        angleView = (TextView) root.findViewById(R.id.angleView);
         angle.setMax(360);
         angle.setProgress(180);
         angleView.setText("0 deg");
-        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout = (LinearLayout) root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
         Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
         Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
-        angle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        angle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                angleView.setText(String.valueOf(angle.getProgress() - 180)+" deg");
+                angleView.setText(String.valueOf(angle.getProgress() - 180) + " deg");
             }
 
             @Override
@@ -90,16 +91,16 @@ public class RotateFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (prevBitmap == null) {
-                    prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
+                    prevBitmap = ((BitmapDrawable) MainActivity.mainImage.getDrawable()).getBitmap();
                 }
-                int anglefactor = (int)(angle.getProgress() - 180);
-                angleView.setText(String.valueOf(anglefactor)+" deg");
+                int anglefactor = (int) (angle.getProgress() - 180);
+                angleView.setText(String.valueOf(anglefactor) + " deg");
                 Asynced task = new Asynced();
                 task.execute(anglefactor);
             }
         });
 
-        applyBtn.setOnClickListener(new View.OnClickListener(){
+        applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -109,7 +110,7 @@ public class RotateFragment extends Fragment {
                 angleView.setVisibility(View.VISIBLE);
             }
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener(){
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
@@ -135,16 +136,15 @@ public class RotateFragment extends Fragment {
         try {
             task.cancel(true);
         } catch (Exception e) {
-           // Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
+            // Toast.makeText(getContext(), ""+e, Toast.LENGTH_LONG).show();
         }
     }
 
-    private Matrix rotateImageByMrx(int angle)
-    {
-        double radians = (angle  * Math.PI) / 180.0;
+    private Matrix rotateImageByMrx(int angle) {
+        double radians = (angle * Math.PI) / 180.0;
         Matrix matrix = new Matrix();
 
-        float[] arr = {(float)Math.cos(radians), (float)-Math.sin(radians), prevBitmap.getWidth() / 2, (float)Math.sin(radians), (float)Math.cos(radians), prevBitmap.getHeight() / 2, 0.0f, 0.0f, 1.0f};
+        float[] arr = {(float) Math.cos(radians), (float) -Math.sin(radians), prevBitmap.getWidth() / 2, (float) Math.sin(radians), (float) Math.cos(radians), prevBitmap.getHeight() / 2, 0.0f, 0.0f, 1.0f};
         matrix.setValues(arr);
 
         return (matrix);

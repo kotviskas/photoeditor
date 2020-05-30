@@ -98,7 +98,6 @@ public class ZoomFragment extends Fragment {
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 btnsLayout.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
                 Coef.setVisibility(View.VISIBLE);

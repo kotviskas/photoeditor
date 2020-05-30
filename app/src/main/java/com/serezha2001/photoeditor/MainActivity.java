@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         toolbar.setTitleTextColor(Color.WHITE);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.eight, R.id.nav_gallery, R.id.nav_slideshow, R.id.four,R.id.five,R.id.six,R.id.seven,R.id.nine, R.id.ten,R.id.eleven,R.id.twelve)
+                R.id.nav_home, R.id.eight, R.id.nav_gallery, R.id.nav_slideshow, R.id.four, R.id.five, R.id.six, R.id.seven, R.id.nine, R.id.ten, R.id.eleven, R.id.twelve)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -83,14 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-                    }
-                    else {
+                    } else {
                         saveImage(((BitmapDrawable) MainActivity.mainImage.getDrawable()).getBitmap(), "redactedImage");
                         Toast.makeText(getApplicationContext(), "Done!", Toast.LENGTH_LONG).show();
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Error! " + e, Toast.LENGTH_LONG).show();
                 }
         }
@@ -111,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
             return crdnts;
 
         float[] f = new float[9];
-        int dens = ((BitmapDrawable)mainImage.getDrawable()).getBitmap().getDensity();
-        float scaleRatio = (float)dens / 160;
+        int dens = ((BitmapDrawable) mainImage.getDrawable()).getBitmap().getDensity();
+        float scaleRatio = (float) dens / 160;
         if (scaleRatio == 0) {
             scaleRatio = 1;
         }
@@ -121,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
         final float scaleY = f[Matrix.MSCALE_Y];
 
         final Drawable d = mainImage.getDrawable();
-        final int origW = (int)(d.getIntrinsicWidth() / scaleRatio);
-        final int origH = (int)(d.getIntrinsicHeight() / scaleRatio);
+        final int origW = (int) (d.getIntrinsicWidth() / scaleRatio);
+        final int origH = (int) (d.getIntrinsicHeight() / scaleRatio);
 
         final int actW = Math.round(origW * scaleX * scaleRatio);
         final int actH = Math.round(origH * scaleY * scaleRatio);
@@ -130,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
         int imgViewW = mainImage.getWidth();
         int imgViewH = mainImage.getHeight();
 
-        int top = (int) (imgViewH - actH)/2;
-        int left = (int) (imgViewW - actW)/2;
+        int top = (int) (imgViewH - actH) / 2;
+        int left = (int) (imgViewW - actW) / 2;
         crdnts[0] = left;
         crdnts[1] = top;
         crdnts[2] = actW + left;
@@ -156,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + File.separator, name + ".png");
             fOs = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOs);
-            MediaStore.Images.Media.insertImage(this.getContentResolver(), file.getAbsolutePath(), file.getName(),  file.getName());
+            MediaStore.Images.Media.insertImage(this.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
         }
         fOs.flush();
         fOs.close();

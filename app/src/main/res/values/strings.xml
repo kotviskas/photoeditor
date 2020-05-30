@@ -28,6 +28,9 @@
     <string name="text_threshold">Threshold</string>
     <string name="home_second">Home Second</string>
     <string name="mainimage">mainImage</string>
+    <string name="color_red">Red</string>
+    <string name="color_green">Green</string>
+    <string name="color_blue">Blue</string>
 
 
 </resources>

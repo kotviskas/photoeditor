@@ -1,4 +1,5 @@
 package com.serezha2001.photoeditor.ui.BlurFragment;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ public class BlurFragment extends Fragment {
 
     class Asynced extends AsyncTask<Integer, Void, Void> {
         Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -47,10 +49,10 @@ public class BlurFragment extends Fragment {
             final int[] pixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
 
             prevBitmap.getPixels(pixels, 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
-            redactBitmap.setPixels(boxBlur(pixels, (int)(radius.getProgress())), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
+            redactBitmap.setPixels(boxBlur(pixels, (int) (radius.getProgress())), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
 
             redactBitmap.getPixels(pixels, 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
-            redactBitmap.setPixels(boxBlur(pixels, (int)(radius.getProgress())), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
+            redactBitmap.setPixels(boxBlur(pixels, (int) (radius.getProgress())), 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
             return null;
         }
 
@@ -67,21 +69,21 @@ public class BlurFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root =  inflater.inflate(R.layout.fragment_blur, container, false);
+        View root = inflater.inflate(R.layout.fragment_blur, container, false);
         MainActivity.mainImage.setVisibility(View.VISIBLE);
-        progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-        radius = (SeekBar)root.findViewById(R.id.radiusSeekbar);
-        radiusView = (TextView)root.findViewById(R.id.radiusView);
+        radius = (SeekBar) root.findViewById(R.id.radiusSeekbar);
+        radiusView = (TextView) root.findViewById(R.id.radiusView);
         radius.setMax(50);
         radius.setProgress(0);
         radiusView.setText("Radius: 0");
-        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout = (LinearLayout) root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
         Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
         Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
-        radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        radius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 radiusView.setText("Radius: " + String.valueOf(radius.getProgress()));
@@ -94,16 +96,16 @@ public class BlurFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (prevBitmap == null) {
-                    prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
+                    prevBitmap = ((BitmapDrawable) MainActivity.mainImage.getDrawable()).getBitmap();
                 }
-                int currentRadius = (int)(radius.getProgress());
+                int currentRadius = (int) (radius.getProgress());
                 radiusView.setText("Radius: " + String.valueOf(currentRadius));
                 Asynced task = new Asynced();
                 task.execute(currentRadius);
             }
         });
 
-        applyBtn.setOnClickListener(new View.OnClickListener(){
+        applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -113,7 +115,7 @@ public class BlurFragment extends Fragment {
                 radiusView.setVisibility(View.VISIBLE);
             }
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener(){
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);

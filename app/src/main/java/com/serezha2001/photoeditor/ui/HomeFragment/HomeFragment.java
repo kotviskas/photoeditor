@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,47 +50,40 @@ public class HomeFragment extends Fragment {
         FloatingActionButton camButton = root.findViewById(R.id.takePhoto);
         FloatingActionButton saveBtn = root.findViewById(R.id.savePic);
 
-        choosePic.setOnClickListener(new View.OnClickListener(){
+        choosePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, SELECT_FILE);
-                    }
-                    else {
+                    } else {
                         choosePic();
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     Toast.makeText(getContext(), "Error! " + e, Toast.LENGTH_LONG).show();
                 }
             }
         });
-        camButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick (View view){
+        camButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CAMERA);
-                }
-                else {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA);
+                } else {
                     openCamera();
                 }
             }
         });
-        saveBtn.setOnClickListener(new View.OnClickListener(){
+        saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},SAVE_PIC);
-                    }
-                    else {
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, SAVE_PIC);
+                    } else {
                         saveImage(((BitmapDrawable) MainActivity.mainImage.getDrawable()).getBitmap(), "redactedImage");
                         Toast.makeText(getContext(), "Done!", Toast.LENGTH_LONG).show();
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     Toast.makeText(getContext(), "Error! " + e, Toast.LENGTH_LONG).show();
                 }
             }
@@ -183,7 +177,7 @@ public class HomeFragment extends Fragment {
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + File.separator, name + ".png");
             fOs = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOs);
-            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), file.getAbsolutePath(), file.getName(),  file.getName());
+            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
         }
         fOs.flush();
         fOs.close();
@@ -193,6 +187,7 @@ public class HomeFragment extends Fragment {
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile("photo_", ".png", storageDir);
     }
+
     private void choosePic() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");

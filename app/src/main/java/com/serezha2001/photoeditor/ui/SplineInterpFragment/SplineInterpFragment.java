@@ -35,22 +35,22 @@ public class SplineInterpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_spline, container, false);
-        final DrawView drawView = (DrawView)root.findViewById(R.id.drawView);
-        interpBtn = (Button)root.findViewById(R.id.interpBtn);
+        final DrawView drawView = (DrawView) root.findViewById(R.id.drawView);
+        interpBtn = (Button) root.findViewById(R.id.interpBtn);
         interpBtn.setEnabled(false);
-        clearBtn = (Button)root.findViewById(R.id.clearBtn);
+        clearBtn = (Button) root.findViewById(R.id.clearBtn);
         clearBtn.setEnabled(false);
-        linearBtn = (Button)root.findViewById(R.id.linearBtn);
+        linearBtn = (Button) root.findViewById(R.id.linearBtn);
         linearBtn.setEnabled(false);
-        deleteBtn = (Button)root.findViewById(R.id.deletebtn);
-        dotPtr = (EditText)root.findViewById(R.id.dotPtr);
+        deleteBtn = (Button) root.findViewById(R.id.deletebtn);
+        dotPtr = (EditText) root.findViewById(R.id.dotPtr);
         deleteBtn.setVisibility(View.INVISIBLE);
         dotPtr.setVisibility(View.INVISIBLE);
 
         Toast.makeText(getContext(), "Tap to add a point!\nYou can move points after interpolation.", Toast.LENGTH_LONG).show();
 
         MainActivity.mainImage.setVisibility(View.INVISIBLE);
-        interpBtn.setOnClickListener(new View.OnClickListener(){
+        interpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isRedacting = true;
@@ -61,7 +61,7 @@ public class SplineInterpFragment extends Fragment {
                 drawView.invalidate();
             }
         });
-        clearBtn.setOnClickListener(new View.OnClickListener(){
+        clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isRedacting = false;
@@ -73,7 +73,7 @@ public class SplineInterpFragment extends Fragment {
                 dotPtr.setVisibility(View.INVISIBLE);
             }
         });
-        linearBtn.setOnClickListener(new View.OnClickListener(){
+        linearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isRedacting = false;
@@ -83,15 +83,14 @@ public class SplineInterpFragment extends Fragment {
                 interpBtn.setEnabled(true);
             }
         });
-        deleteBtn.setOnClickListener(new View.OnClickListener(){
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     int ptr = Integer.valueOf(dotPtr.getText().toString()) - 1;
-                    if (ptr < 0 || ptr > drawView.k - 1){
+                    if (ptr < 0 || ptr > drawView.k - 1) {
                         Toast.makeText(getContext(), "There's no dot with your number", Toast.LENGTH_LONG).show();
-                    }
-                    else {
+                    } else {
                         drawView.deleteDot(ptr);
                         drawView.mCanvas.drawColor(Color.WHITE);
                         drawView.addDots();
@@ -114,13 +113,14 @@ public class SplineInterpFragment extends Fragment {
     static class cubicSpline {
         static class spline {
             double a, b, c, d, x;
-        };
+        }
+
+        ;
         spline[] splines;
 
-        void getSpline(int n)
-        {
+        void getSpline(int n) {
             splines = new spline[n];
-            for (int i = 0; i < n; ++i){
+            for (int i = 0; i < n; ++i) {
                 splines[i] = new spline();
                 splines[i].x = DrawView.xs[i];
                 splines[i].a = DrawView.ys[i];
@@ -156,16 +156,14 @@ public class SplineInterpFragment extends Fragment {
             spline s;
             if (x >= splines[n - 1].x) {
                 s = splines[n - 1];
-            }
-            else {
+            } else {
                 int i = 0;
                 int j = n - 1;
                 while (i + 1 < j) {
                     int k = i + (j - i) / 2;
                     if (x <= splines[k].x) {
                         j = k;
-                    }
-                    else {
+                    } else {
                         i = k;
                     }
                 }
@@ -176,16 +174,17 @@ public class SplineInterpFragment extends Fragment {
             return s.a + (s.b + (s.c / 2.0 + s.d * dx / 6.0) * dx) * dx;
         }
     }
+
     static void drawSplines() {
         cubicSpline sp = new cubicSpline();
         sp.getSpline(DrawView.k);
         int n = 900;
-        double h = (DrawView.xs[DrawView.k-1] - DrawView.xs[0])/(n-1);
+        double h = (DrawView.xs[DrawView.k - 1] - DrawView.xs[0]) / (n - 1);
         double[] spline = new double[n];
-        spline[0] = sp.interpolate(DrawView.xs[0]+0 * h);
+        spline[0] = sp.interpolate(DrawView.xs[0] + 0 * h);
         for (int i = 1; i < spline.length; i++) {
-            spline[i] = sp.interpolate(DrawView.xs[0]+i * h);
-            DrawView.mCanvas.drawLine((float)(DrawView.xs[0]+(i-1) * h), (float)spline[i-1], (float)(DrawView.xs[0]+i * h), (float)spline[i], DrawView.mPaint);
+            spline[i] = sp.interpolate(DrawView.xs[0] + i * h);
+            DrawView.mCanvas.drawLine((float) (DrawView.xs[0] + (i - 1) * h), (float) spline[i - 1], (float) (DrawView.xs[0] + i * h), (float) spline[i], DrawView.mPaint);
             //DrawView.mCanvas.drawCircle((int)(DrawView.xs[0]+i * h), (int)spline[i], 6, DrawView.mPaint);
         }
     }
@@ -204,7 +203,7 @@ class DrawView extends View {
 
     public DrawView(Context canvas) {
         super(canvas);
-        context=canvas;
+        context = canvas;
         initVals();
     }
 
@@ -231,8 +230,8 @@ class DrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
-        canvas.drawPath( mPath,  mPaint);
+        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        canvas.drawPath(mPath, mPaint);
     }
 
     protected void initVals() {
@@ -271,14 +270,13 @@ class DrawView extends View {
                 mCanvas.drawPath(mPath, mPaint);
             }
             k++;
-        }
-        else {
+        } else {
             float minDotDist = 10000;
-            for (int i = 0; i < k; i++){
+            for (int i = 0; i < k; i++) {
                 //if (Math.abs(xs[i] + ys[i] - x - y) < minDotDist) {
-                if (Math.sqrt((xs[i]-x)*(xs[i]-x) + (ys[i]-y)*(ys[i]-y)) < minDotDist) {
+                if (Math.sqrt((xs[i] - x) * (xs[i] - x) + (ys[i] - y) * (ys[i] - y)) < minDotDist) {
                     //minDotDist = (float)Math.abs(xs[i] + ys[i] - x - y);
-                    minDotDist = (float)Math.sqrt((xs[i]-x)*(xs[i]-x) + (ys[i]-y)*(ys[i]-y));
+                    minDotDist = (float) Math.sqrt((xs[i] - x) * (xs[i] - x) + (ys[i] - y) * (ys[i] - y));
                     dotToChange = i;
                 }
             }
@@ -300,16 +298,16 @@ class DrawView extends View {
         }
     }
 
-    public void addDots(){
-        for (int i = 0; i < k; i++){
-            mCanvas.drawCircle((int)xs[i], (int)ys[i], 9, dotPaint);
+    public void addDots() {
+        for (int i = 0; i < k; i++) {
+            mCanvas.drawCircle((int) xs[i], (int) ys[i], 9, dotPaint);
         }
     }
 
     public void drawLinear() {
         mCanvas.drawColor(Color.WHITE);
-        for (int i = 1; i < k; i++){
-            mCanvas.drawLine((int)xs[i-1], (int)ys[i-1], (int)xs[i], (int)ys[i], mPaint);
+        for (int i = 1; i < k; i++) {
+            mCanvas.drawLine((int) xs[i - 1], (int) ys[i - 1], (int) xs[i], (int) ys[i], mPaint);
         }
         addDots();
     }
@@ -333,12 +331,12 @@ class DrawView extends View {
     public void sortDots() {
         for (int i = 1; i < k; i++) {
             if (xs[i] < xs[i - 1]) {
-                swap(xs, i, i-1);
-                swap(ys, i, i-1);
+                swap(xs, i, i - 1);
+                swap(ys, i, i - 1);
                 for (int z = i - 1; (z - 1) >= 0; z--) {
                     if (xs[z] < xs[z - 1]) {
-                        swap(xs, z, z-1);
-                        swap(ys, z, z-1);
+                        swap(xs, z, z - 1);
+                        swap(ys, z, z - 1);
                     } else {
                         break;
                     }
@@ -349,14 +347,14 @@ class DrawView extends View {
 
     public void deleteDot(int ptr) {
         for (int i = ptr; i < k - 1; i++) {
-            xs[i] = xs[i+1];
-            ys[i] = ys[i+1];
+            xs[i] = xs[i + 1];
+            ys[i] = ys[i + 1];
         }
         k--;
 
     }
 
-    public void clearScreen(){
+    public void clearScreen() {
         mCanvas.drawColor(Color.WHITE);
         k = 0;
         xs = new double[1000];

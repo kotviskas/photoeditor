@@ -1,4 +1,5 @@
 package com.serezha2001.photoeditor.ui.CubeFragment;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,14 +27,17 @@ public class CubeFragment extends Fragment {
 
     static class dotVector {
         double x, y, z;
-        dotVector(){
+
+        dotVector() {
 
         }
-        dotVector (double x, double y, double z) {
+
+        dotVector(double x, double y, double z) {
             this.x = x;
             this.y = y;
             this.z = z;
         }
+
         Color color;
     }
 
@@ -72,50 +76,56 @@ public class CubeFragment extends Fragment {
         points[6] = new dotVector(0.5, 0.5, 0.5);
         points[7] = new dotVector(-0.5, 0.5, 0.5);
 
-        seekBarX.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        seekBarX.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                angleX = (double)(seekBar.getProgress() * Math.PI / 180);
+                angleX = (double) (seekBar.getProgress() * Math.PI / 180);
                 drawCube(drawView);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
-        seekBarY.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        seekBarY.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                angleY = (double)(seekBar.getProgress() * Math.PI / 180);
+                angleY = (double) (seekBar.getProgress() * Math.PI / 180);
                 drawCube(drawView);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
-        seekBarZ.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        seekBarZ.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                angleZ = (double)(seekBar.getProgress() * Math.PI / 180);
+                angleZ = (double) (seekBar.getProgress() * Math.PI / 180);
                 drawCube(drawView);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-        
+
         return root;
     }
 
@@ -127,29 +137,29 @@ public class CubeFragment extends Fragment {
         drawView.scaleCoords();
         drawView.drawNums();
         for (int i = 0; i < 4; i++) {
-            drawView.connect(i, (i+1) % 4, projected);
-            drawView.connect(i+4, ((i+1) % 4)+4, projected);
-            drawView.connect(i, i+4, projected);
+            drawView.connect(i, (i + 1) % 4, projected);
+            drawView.connect(i + 4, ((i + 1) % 4) + 4, projected);
+            drawView.connect(i, i + 4, projected);
         }
     }
 
     void calculateMatrix(double x, double y, double z) {
         double[][] rotationZ = {
-                { Math.cos(z), -Math.sin(z), 0},
-                { Math.sin(z), Math.cos(z), 0},
-                { 0, 0, 1}
+                {Math.cos(z), -Math.sin(z), 0},
+                {Math.sin(z), Math.cos(z), 0},
+                {0, 0, 1}
         };
 
         double[][] rotationX = {
-                { 1, 0, 0},
-                { 0, Math.cos(x), -Math.sin(x)},
-                { 0, Math.sin(x), Math.cos(x)}
+                {1, 0, 0},
+                {0, Math.cos(x), -Math.sin(x)},
+                {0, Math.sin(x), Math.cos(x)}
         };
 
         double[][] rotationY = {
-                { Math.cos(y), 0, Math.sin(y)},
-                { 0, 1, 0},
-                { -Math.sin(y), 0, Math.cos(y)}
+                {Math.cos(y), 0, Math.sin(y)},
+                {0, 1, 0},
+                {-Math.sin(y), 0, Math.cos(y)}
         };
         finalMatrix = matrixMultiply(rotationX, rotationY);
         finalMatrix = matrixMultiply(finalMatrix, rotationZ);
@@ -206,7 +216,7 @@ public class CubeFragment extends Fragment {
 
     dotVector matrixMultiply(double[][] a, dotVector b) {
         double[][] m = vecToMatrix(b);
-        return matrixToVec(matrixMultiply(a,m));
+        return matrixToVec(matrixMultiply(a, m));
     }
 }
 
@@ -219,7 +229,7 @@ class DrawView extends View {
 
     public DrawView(Context canvas) {
         super(canvas);
-        context=canvas;
+        context = canvas;
         initVals();
     }
 
@@ -243,8 +253,8 @@ class DrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
-        canvas.drawPath( mPath,  mPaint);
+        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        canvas.drawPath(mPath, mPaint);
     }
 
     protected void initVals() {
@@ -272,25 +282,25 @@ class DrawView extends View {
     void connect(int i, int j, CubeFragment.dotVector[] points) {
         CubeFragment.dotVector a = points[i];
         CubeFragment.dotVector b = points[j];
-        mCanvas.drawLine((float)a.x + getWidth()/2, (float)a.y + getHeight()/2, (float)b.x + getWidth()/2, (float)b.y + getHeight()/2, mPaint);
-        mCanvas.drawCircle((float)a.x + getWidth()/2, (float)a.y + getHeight()/2, 5, dotPaint);
-        mCanvas.drawCircle((float)b.x + getWidth()/2, (float)b.y + getHeight()/2, 5, dotPaint);
+        mCanvas.drawLine((float) a.x + getWidth() / 2, (float) a.y + getHeight() / 2, (float) b.x + getWidth() / 2, (float) b.y + getHeight() / 2, mPaint);
+        mCanvas.drawCircle((float) a.x + getWidth() / 2, (float) a.y + getHeight() / 2, 5, dotPaint);
+        mCanvas.drawCircle((float) b.x + getWidth() / 2, (float) b.y + getHeight() / 2, 5, dotPaint);
         invalidate();
     }
 
     void drawNums() {
-        mCanvas.drawText("6", (float)(CubeFragment.projected[0].x + getWidth()/2 + ((CubeFragment.projected[2].x - CubeFragment.projected[0].x) / 2)), (float)(CubeFragment.projected[0].y + getHeight()/2 + ((CubeFragment.projected[2].y - CubeFragment.projected[0].y) / 2)), numPaint);
-        mCanvas.drawText("5", (float)(CubeFragment.projected[3].x + getWidth()/2 + ((CubeFragment.projected[6].x - CubeFragment.projected[3].x) / 2)), (float)(CubeFragment.projected[3].y + getHeight()/2 + ((CubeFragment.projected[6].y - CubeFragment.projected[3].y) / 2)), numPaint);
-        mCanvas.drawText("4", (float)(CubeFragment.projected[0].x + getWidth()/2 + ((CubeFragment.projected[5].x - CubeFragment.projected[0].x) / 2)), (float)(CubeFragment.projected[0].y + getHeight()/2 + ((CubeFragment.projected[5].y - CubeFragment.projected[0].y) / 2)), numPaint);
-        mCanvas.drawText("3", (float)(CubeFragment.projected[1].x + getWidth()/2 + ((CubeFragment.projected[6].x - CubeFragment.projected[1].x) / 2)), (float)(CubeFragment.projected[1].y + getHeight()/2 + ((CubeFragment.projected[6].y - CubeFragment.projected[1].y) / 2)), numPaint);
-        mCanvas.drawText("2", (float)(CubeFragment.projected[4].x + getWidth()/2 + ((CubeFragment.projected[6].x - CubeFragment.projected[4].x) / 2)), (float)(CubeFragment.projected[4].y + getHeight()/2 + ((CubeFragment.projected[6].y - CubeFragment.projected[4].y) / 2)), numPaint);
-        mCanvas.drawText("1", (float)(CubeFragment.projected[0].x + getWidth()/2 + ((CubeFragment.projected[7].x - CubeFragment.projected[0].x) / 2)), (float)(CubeFragment.projected[0].y + getHeight()/2 + ((CubeFragment.projected[7].y - CubeFragment.projected[0].y) / 2)), numPaint);
+        mCanvas.drawText("6", (float) (CubeFragment.projected[0].x + getWidth() / 2 + ((CubeFragment.projected[2].x - CubeFragment.projected[0].x) / 2)), (float) (CubeFragment.projected[0].y + getHeight() / 2 + ((CubeFragment.projected[2].y - CubeFragment.projected[0].y) / 2)), numPaint);
+        mCanvas.drawText("5", (float) (CubeFragment.projected[3].x + getWidth() / 2 + ((CubeFragment.projected[6].x - CubeFragment.projected[3].x) / 2)), (float) (CubeFragment.projected[3].y + getHeight() / 2 + ((CubeFragment.projected[6].y - CubeFragment.projected[3].y) / 2)), numPaint);
+        mCanvas.drawText("4", (float) (CubeFragment.projected[0].x + getWidth() / 2 + ((CubeFragment.projected[5].x - CubeFragment.projected[0].x) / 2)), (float) (CubeFragment.projected[0].y + getHeight() / 2 + ((CubeFragment.projected[5].y - CubeFragment.projected[0].y) / 2)), numPaint);
+        mCanvas.drawText("3", (float) (CubeFragment.projected[1].x + getWidth() / 2 + ((CubeFragment.projected[6].x - CubeFragment.projected[1].x) / 2)), (float) (CubeFragment.projected[1].y + getHeight() / 2 + ((CubeFragment.projected[6].y - CubeFragment.projected[1].y) / 2)), numPaint);
+        mCanvas.drawText("2", (float) (CubeFragment.projected[4].x + getWidth() / 2 + ((CubeFragment.projected[6].x - CubeFragment.projected[4].x) / 2)), (float) (CubeFragment.projected[4].y + getHeight() / 2 + ((CubeFragment.projected[6].y - CubeFragment.projected[4].y) / 2)), numPaint);
+        mCanvas.drawText("1", (float) (CubeFragment.projected[0].x + getWidth() / 2 + ((CubeFragment.projected[7].x - CubeFragment.projected[0].x) / 2)), (float) (CubeFragment.projected[0].y + getHeight() / 2 + ((CubeFragment.projected[7].y - CubeFragment.projected[0].y) / 2)), numPaint);
     }
 
     void scaleCoords() {
         for (CubeFragment.dotVector v : CubeFragment.projected) {
-            v.x *= Math.min(getWidth(), getHeight())/3;
-            v.y *= Math.min(getWidth(), getHeight())/3;
+            v.x *= Math.min(getWidth(), getHeight()) / 3;
+            v.y *= Math.min(getWidth(), getHeight()) / 3;
         }
     }
 }

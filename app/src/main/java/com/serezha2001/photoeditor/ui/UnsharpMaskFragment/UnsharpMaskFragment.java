@@ -27,7 +27,7 @@ import com.serezha2001.photoeditor.R;
 public class UnsharpMaskFragment extends Fragment {
 
     private float amount = 0;
-    private int radius = 1 , threshold = 1;
+    private int radius = 1, threshold = 1;
 
     private SeekBar radiusInput;
     private TextView radiusView;
@@ -46,6 +46,7 @@ public class UnsharpMaskFragment extends Fragment {
 
     class Asynced extends AsyncTask<Float, Void, Void> {
         Bitmap redactBitmap;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -81,10 +82,10 @@ public class UnsharpMaskFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_unsharp_mask, container, false);
         MainActivity.mainImage.setVisibility(View.VISIBLE);
-        progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        srcBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
+        srcBitmap = ((BitmapDrawable) MainActivity.mainImage.getDrawable()).getBitmap();
 
         amountInput = (SeekBar) root.findViewById(R.id.amountInput);
         amountView = (TextView) root.findViewById(R.id.amountView);
@@ -101,9 +102,9 @@ public class UnsharpMaskFragment extends Fragment {
         radiusView.setText("Radius: 0");
         amountView.setText("Amount: 0");
         thresholdView.setText("Threshold: 0");
-        applyButton = (Button)root.findViewById(R.id.applyButton);
+        applyButton = (Button) root.findViewById(R.id.applyButton);
 
-        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout = (LinearLayout) root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
         Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
         Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
@@ -112,16 +113,16 @@ public class UnsharpMaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                    threshold = thresholdInput.getProgress();
-                    radius = radiusInput.getProgress();
-                    amount = amountInput.getProgress();
+                threshold = thresholdInput.getProgress();
+                radius = radiusInput.getProgress();
+                amount = amountInput.getProgress();
 
-                    Asynced task = new Asynced();
-                    task.execute(amount, (float)threshold, (float)radius);
+                Asynced task = new Asynced();
+                task.execute(amount, (float) threshold, (float) radius);
             }
         });
 
-        radiusInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        radiusInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 radiusView.setText("Radius: " + String.valueOf(radiusInput.getProgress()));
@@ -136,7 +137,7 @@ public class UnsharpMaskFragment extends Fragment {
             }
         });
 
-        amountInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        amountInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 amountView.setText("Amount: " + String.valueOf(amountInput.getProgress()));
@@ -151,7 +152,7 @@ public class UnsharpMaskFragment extends Fragment {
             }
         });
 
-        thresholdInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        thresholdInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 thresholdView.setText("Threshold: " + String.valueOf(thresholdInput.getProgress()));
@@ -166,7 +167,7 @@ public class UnsharpMaskFragment extends Fragment {
             }
         });
 
-        applyBtn.setOnClickListener(new View.OnClickListener(){
+        applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btnsLayout.setVisibility(View.INVISIBLE);
@@ -180,7 +181,7 @@ public class UnsharpMaskFragment extends Fragment {
 
             }
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener(){
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(srcBitmap);
@@ -334,8 +335,8 @@ public class UnsharpMaskFragment extends Fragment {
 
         int srcRed, srcGreen, srcBlue, blurRed, blurGreen, blurBlue, usmPixel;
 
-        for (int x = 0;x < srcBitmap.getWidth();x++) {
-            for (int y = 0;y < srcBitmap.getHeight();y++) {
+        for (int x = 0; x < srcBitmap.getWidth(); x++) {
+            for (int y = 0; y < srcBitmap.getHeight(); y++) {
 
                 int srcPixel = srcBitmap.getPixel(x, y);
                 int blurPixel = blurBitmap.getPixel(x, y);
@@ -346,10 +347,10 @@ public class UnsharpMaskFragment extends Fragment {
 
                 blurRed = Color.red(blurPixel);
                 blurGreen = Color.green(blurPixel);
-                blurBlue= Color.blue(blurPixel);
+                blurBlue = Color.blue(blurPixel);
 
                 if (Math.abs(srcRed - blurRed) >= threshold) {
-                    srcRed = (int)(amount * (srcRed - blurRed) + srcRed);
+                    srcRed = (int) (amount * (srcRed - blurRed) + srcRed);
                     if (srcRed > 255) {
                         srcRed = 255;
                     }
@@ -359,7 +360,7 @@ public class UnsharpMaskFragment extends Fragment {
                 }
 
                 if (Math.abs(srcGreen - blurGreen) >= threshold) {
-                    srcGreen = (int)(amount * (srcGreen - blurGreen) + srcGreen);
+                    srcGreen = (int) (amount * (srcGreen - blurGreen) + srcGreen);
                     if (srcGreen > 255) {
                         srcGreen = 255;
                     }
@@ -369,7 +370,7 @@ public class UnsharpMaskFragment extends Fragment {
                 }
 
                 if (Math.abs(srcBlue - blurBlue) >= threshold) {
-                    srcBlue = (int)(amount * (srcBlue - blurBlue) + srcBlue);
+                    srcBlue = (int) (amount * (srcBlue - blurBlue) + srcBlue);
                     if (srcBlue > 255) {
                         srcBlue = 255;
                     }

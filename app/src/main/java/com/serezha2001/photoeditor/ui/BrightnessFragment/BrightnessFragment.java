@@ -35,6 +35,7 @@ public class BrightnessFragment extends Fragment {
 
     class Asynced extends AsyncTask<Double, Void, Void> {
         Bitmap redactBitmap = Bitmap.createBitmap(prevBitmap.getWidth(), prevBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -63,12 +64,12 @@ public class BrightnessFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_brightness, container, false);
         MainActivity.mainImage.setVisibility(View.VISIBLE);
-        progressBar = (ProgressBar)root.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-        seekBar = (SeekBar)root.findViewById(R.id.brightSeekbar);
-        coefView = (TextView)root.findViewById(R.id.coefView);
+        seekBar = (SeekBar) root.findViewById(R.id.brightSeekbar);
+        coefView = (TextView) root.findViewById(R.id.coefView);
         prevBitmap = null;
-        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout = (LinearLayout) root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
         Button applyBtn = (Button) root.findViewById(R.id.applyBtn);
         Button cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
@@ -77,16 +78,16 @@ public class BrightnessFragment extends Fragment {
         seekBar.setProgress(100);
         coefView.setText("100%");
 
-        btnsLayout = (LinearLayout)root.findViewById(R.id.processBtnsLayout);
+        btnsLayout = (LinearLayout) root.findViewById(R.id.processBtnsLayout);
         btnsLayout.setVisibility(View.INVISIBLE);
-        applyBtn = (Button)root.findViewById(R.id.applyBtn);
-        cancelBtn = (Button)root.findViewById(R.id.cancelBtn);
+        applyBtn = (Button) root.findViewById(R.id.applyBtn);
+        cancelBtn = (Button) root.findViewById(R.id.cancelBtn);
 
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                coefView.setText(String.valueOf(seekBar.getProgress())+"%");
+                coefView.setText(String.valueOf(seekBar.getProgress()) + "%");
             }
 
             @Override
@@ -97,17 +98,17 @@ public class BrightnessFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (prevBitmap == null) {
-                    prevBitmap = ((BitmapDrawable)MainActivity.mainImage.getDrawable()).getBitmap();
+                    prevBitmap = ((BitmapDrawable) MainActivity.mainImage.getDrawable()).getBitmap();
                 }
-                Coef = (double)(seekBar.getProgress()) / 100;
-                coefView.setText(String.valueOf((int)(Coef * 100))+"%");
+                Coef = (double) (seekBar.getProgress()) / 100;
+                coefView.setText(String.valueOf((int) (Coef * 100)) + "%");
                 Asynced task = new Asynced();
                 task.execute(Coef);
 
             }
         });
 
-        applyBtn.setOnClickListener(new View.OnClickListener(){
+        applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -117,7 +118,7 @@ public class BrightnessFragment extends Fragment {
                 coefView.setVisibility(View.VISIBLE);
             }
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener(){
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.mainImage.setImageBitmap(prevBitmap);
@@ -151,9 +152,9 @@ public class BrightnessFragment extends Fragment {
         final int[] pixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
         final int[] newPixels = new int[prevBitmap.getWidth() * prevBitmap.getHeight()];
         prevBitmap.getPixels(pixels, 0, prevBitmap.getWidth(), 0, 0, prevBitmap.getWidth(), prevBitmap.getHeight());
-        Thread thread = new Thread(){
-            public void run(){
-                for (int x = 0; x < (Integer) prevBitmap.getWidth()/3; x++) {
+        Thread thread = new Thread() {
+            public void run() {
+                for (int x = 0; x < (Integer) prevBitmap.getWidth() / 3; x++) {
                     for (int y = 0; y < prevBitmap.getHeight(); y++) {
                         //int prevBitmapPixel = BrightnessFragment.this.prevBitmap.getPixel(x, y);
                         int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
@@ -169,9 +170,9 @@ public class BrightnessFragment extends Fragment {
                 }
             }
         };
-        Thread thread2 = new Thread(){
-            public void run(){
-                for (int x = (Integer) prevBitmap.getWidth()/3; x < (Integer) prevBitmap.getWidth()/3*2; x++) {
+        Thread thread2 = new Thread() {
+            public void run() {
+                for (int x = (Integer) prevBitmap.getWidth() / 3; x < (Integer) prevBitmap.getWidth() / 3 * 2; x++) {
                     for (int y = 0; y < prevBitmap.getHeight(); y++) {
                         int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                         double red = Color.red(prevBitmapPixel) * coef;
@@ -189,7 +190,7 @@ public class BrightnessFragment extends Fragment {
         };
         thread.start();
         thread2.start();
-        for (int x = (Integer) prevBitmap.getWidth()/3*2; x < prevBitmap.getWidth(); x++) {
+        for (int x = (Integer) prevBitmap.getWidth() / 3 * 2; x < prevBitmap.getWidth(); x++) {
             for (int y = 0; y < prevBitmap.getHeight(); y++) {
                 int prevBitmapPixel = pixels[prevBitmap.getWidth() * y + x];
                 double red = Color.red(prevBitmapPixel) * coef;
